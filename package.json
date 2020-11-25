@@ -2,7 +2,7 @@
   "name": "frontend-applications",
   "version": "0.1.0",
   "private": true,
-  "homepage": "",
+  "homepage": "http://GiovanniDw.github.io/frontend-applications",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

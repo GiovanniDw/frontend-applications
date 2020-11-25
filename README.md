@@ -1,70 +1,158 @@
-# Getting Started with Create React App
+<h1 align="center">Frontend Applications</h1>
+<div align="center">
+ Frontend Data is part of the Tech Track
+</div>
+<div align="center">
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+ Tech Track is an elective track of the following 3 courses</br>
+</div>
+<div align="center">
+  <p>
+    <a href="https://cmda-tt.github.io/course-20-21/courses/functional-programming">
+      Functional Programming
+    </a>
+    <span> | </span>
+    <a href="https://cmda-tt.github.io/course-20-21/courses/frontend-data">
+      <b>Frontend Data</b>
+    </a>
+    <span> | </span>
+    <a href="https://cmda-tt.github.io/course-20-21/courses/frontend-applications">
+      Frontend Applications
+    </a>
+    </br>
+    <sup>given during Project Information Design <a href="https://github.com/cmda">@CMDA⤴︎</a></sup>
+  </p>
+  </div>
+  <div align="center">
+  <sub>More information about the Tech Track?</sub>
+  </br>
+<sup>
+<a href="https://github.com/cmda-tt/course-20-21">@CMDA-TT⤴︎</a>
+</sup>
+</div>
 
-## Available Scripts
+<div align="center">
+My process during the Tech Track is documented in <a href="https://github.com/GiovanniDw/frontend-applications/wiki">the <strong>Wiki!</strong> ⤴︎</a>
+</div>
 
-In the project directory, you can run:
+<br>
 
-### `yarn start`
+## Contents
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+[ ⦿ Features](#features)  
+[ ⦿ Example](#example)  
+[ ⦿ Installation](#installation)  
+[ ⦿ API](#api)  
+[ ⦿ Assignment](#assignment)  
+  [ ⦿ Functional Programming](#functional-programming-1)  
+  [ ⦿ Frontend Data](#frontend-data)  
+  [ ⦿ Frontend Applications](#frontend-applications)  
+[ ⦿ Rubric](#rubric)  
+[ ⦿ Resources](#resources)  
+[ ⦿ Credits](#credits)  
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
-### `yarn test`
+## Concept
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+> A visualisation about which city you can park best on a special day.
 
-### `yarn build`
+- **Op welke speciale dag kun je het beste in de stad parkeren?**
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Features
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- [x] Get external data from API.
+- [ ] Clean external API data that i need.
+- [ ] Transform the data thats clean.
+- [ ] Use D3 to Create Visualisation from clean data.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Installation
 
-### `yarn eject`
+First, clone the repo to your local machine.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```zsh
+$ git clone https://github.com/GiovanniDw/frontend-data.git
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Then ` $ cd/ ` into the project folder.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```zsh
+$ npm install
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Now run the project!
 
-## Learn More
+```zsh
+$ yarn start
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## API
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Most of the data that will be used, comes from the [opendata.rdw.nl⤴︎](https://opendata.rdw.nl) API.
 
-### Code Splitting
+**API-endpoint:**  
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```html
+https://opendata.rdw.nl/resource/ixf8-gtwq.json
+```
 
-### Analyzing the Bundle Size
+## Assignment
+> Create a data visualisation with d3 based on given data.  
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+During this course the code in this repo will use functional patterns to get, filter, clean & transform datasets from external sources about parking. And visualise that data. For more details about te concept and the data go to [the Wiki⤴︎](https://github.com/GiovanniDw/functional-programming/wiki/Concept)
+<details>
+  <summary><strong>Functional Programming</strong></summary>
 
-### Making a Progressive Web App
+**During this course I will**  
+⦿ Apply functional programming patterns to clean & transform data.  
+⦿ Develop a concept for _The Volkskrant_ based on external datasets  
+⦿ Create interactive visualizations with data by using D3  
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+</details>
+</br>
+<details>
+  <summary><strong>Frontend Data</strong></summary>
 
-### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```js
 
-### Deployment
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `yarn build` fails to minify
+</details>
+</br>
+<details>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+  <summary><strong>Frontend Applications</strong></summary>
+
+
+```js
+```
+
+
+</details>
+
+
+## Rubric
+
+- [Functional Programming ⤴︎](https://github.com/cmda-tt/course-20-21/blob/master/pages/frontend-data/assessment.md)
+
+## Resources
+
+- [CMDA Tech Track recource page](https://cmda-tt.github.io/course-20-21/resources/)
+
+
+## Credits
+
+- Teachers from the [Tech Track @CMD ⤴︎](https://github.com/cmda-tt/)
+- [adamcarter.dev](https://adamcarter.dev)/[creating-visualizations-with-d3-and-react/](https://adamcarter.dev/creating-visualizations-with-d3-and-react/)
+- [Curran Kelleher](https://github.com/curran)
+
+---
+
+<p align="center">
+<a align="left" href="https://github.com/GiovanniDw/frontend-data/blob/main/LICENSE"> MIT licenced </a>
+ <span>|</span> 
+ <a align="center" href="https://github.com/GiovanniDw/frontend-data/wiki"><strong> GiovanniDw </strong> </a>
+<span>|</span>
+<a align="right" href="https://github.com/GiovanniDw/frontend-data/wiki"> Wiki for more </a>
+</p>

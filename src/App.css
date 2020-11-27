@@ -27,7 +27,7 @@
 
 
 #provinces {
-	fill: var(--lightYellow);
+	fill: var(--lightGreen);
 }
 
 #provinces .active {
@@ -36,7 +36,7 @@
 
 #province-borders {
 	fill: none;
-	stroke: #fff;
+	stroke: var(--white);
 	stroke-width: 1.5px;
 	stroke-linejoin: round;
 	stroke-linecap: round;
@@ -44,30 +44,29 @@
 }
 
 .gemeente-grens {
-	fill: var(--lightGreen);
-	fill-opacity: 0;
-	stroke: #fff;
 	
+	stroke-linejoin: round;
+	stroke-linecap: round;
+	stroke: var(--white);
+	stroke-width: 1.5px;
 	transition-duration: 0.5s;
 }
 
 .gemeente-grens:hover,
 .province:hover {
 	transition-duration: 0.5s;
-	opacity: .5;
+	opacity: .9;
 }
 
 .province {
 	stroke-opacity: 0.5;
 	/* stroke-width: 1px; */
-	stroke: none;
+	/* stroke: none; */
+	stroke-linejoin: round;
+	stroke-linecap: round;
 }
 .gemeente {
 	fill-opacity: 1;
 
 	/* stroke: white; */
-}
-.province:hover {
-	/* fill:green; */
-	fill-opacity: 0.8;
 }

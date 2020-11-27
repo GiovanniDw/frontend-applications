@@ -19,12 +19,8 @@ export const DrawMap = (props) => {
 	const [activeProvince, setActiveProvince] = useState(null);
 	// useEffect(() => props.svg(activeProvince), []);
 
-	function clickedProvince(d) {
-		setActiveProvince(d);
-	}
-
 	return (
-		<ZoomContainer activeProvince={'activeProvince'}>
+		<ZoomContainer activeProvince={activeProvince}>
 			<g className='nld'>
 				<g id='gemeentes'>
 					{gemeente.features.map((d) => (
@@ -36,16 +32,14 @@ export const DrawMap = (props) => {
 					))}
 				</g>
 				<g id='provinces'>
-					{provinces.map(d => (
+					{provinces.map((d) => (
 						<Province
 							data={d}
 							key={d.id}
 							d={path(d)}
 							isActive={activeProvince === d}
-							onClick={clickedProvince}
+							onClick={() => setActiveProvince(d)}
 						/>
-							
-						
 					))}
 				</g>
 
@@ -69,15 +63,12 @@ const Province = ({ d, isActive, onClick }) => {
 	);
 };
 
-
-
-
 const Circle = styled.circle`
-	fill: ${colors.midGray};
+	fill: ${colors.blue};
 	fill-opacity: 1;
 
 	&:hover {
-		fill-opacity: 0.8;
+		fill: ${colors.darkBlue};
 	}
 `;
 

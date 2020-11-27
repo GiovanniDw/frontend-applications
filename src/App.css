@@ -19,15 +19,14 @@
 	--lightYellow: #fff59d;
 }
 
-
 .App-logo {
 	height: 40vmin;
 	pointer-events: none;
 }
 
-
 #provinces {
 	fill: var(--lightGreen);
+	stroke: var(--lightGreen);
 }
 
 #provinces .active {
@@ -44,23 +43,24 @@
 }
 
 .gemeente-grens {
-	
 	stroke-linejoin: round;
 	stroke-linecap: round;
-	stroke: var(--white);
-	stroke-width: 1.5px;
-	transition-duration: 0.5s;
+	stroke: var(--green);
+	stroke-opacity: 1;
+	/* stroke-width: 0.1em; */
+	/* transition-duration: 0.5s; */
+	fill: var(--lightGreen);
 }
 
 .gemeente-grens:hover,
 .province:hover {
 	transition-duration: 0.5s;
-	opacity: .9;
+	opacity: 0.9;
 }
 
 .province {
 	stroke-opacity: 0.5;
-	/* stroke-width: 1px; */
+	stroke-width: 1px;
 	/* stroke: none; */
 	stroke-linejoin: round;
 	stroke-linecap: round;

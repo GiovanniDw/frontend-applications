@@ -51,12 +51,12 @@
 	/* transition-duration: 0.5s; */
 	fill: var(--lightGreen);
 }
-
+/* 
 .gemeente-grens:hover,
 .province:hover {
 	transition-duration: 0.5s;
 	opacity: 0.9;
-}
+} */
 
 .province {
 	stroke-opacity: 0.5;

@@ -1,4 +1,4 @@
-import { select, zoom, geoBounds } from 'd3';
+import { select, zoom, geoPath } from 'd3';
 import React, { useState, useEffect } from 'react';
 import { useSvg } from './SVGContainer';
 
@@ -11,15 +11,22 @@ export const ZoomContainer = (props) => {
 	const zoomed = (event) => {
 		setTransform(event.transform);
 	};
-
+	// const clicked = (event, d) => {
+	// 	const [[x0, y0], [x1, y1]] = geoPath.bounds(d);
+	// };
 	// const zoomToContainer = (event) => {
 	// 	// const [[x0, y0], [x1, y1]] = path.bounds(d);
 	// 	event.stopPropagation();
 	// };
-	if (activeProvince) {
-		const currentProvince = select(activeProvince);
-		// console.log(currentProvince.node());
-	}
+
+	// const reset = () => {
+
+	// }
+
+	// if (activeProvince) {
+	// 	const currentProvince = select(activeProvince);
+	// 	// console.log(currentProvince.node());
+	// }
 
 	useEffect(() => {
 		if (!svgElement) return;

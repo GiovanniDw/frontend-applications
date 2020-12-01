@@ -16,6 +16,7 @@ Learn more about the [`tech-trach().and().this(course)`](https://github.com/cmda
 - [Installation](#installation)
 - [Assignment](#assignment)
   - [Concept](#concept)
+    - [Research Questions](#research-questions)
 - [API's](#apis)
 - [Resources](#resources)
 - [Credits](#credits)
@@ -25,15 +26,18 @@ Learn more about the [`tech-trach().and().this(course)`](https://github.com/cmda
 Frontend Applications is the final course of the Tech-Track.  
 During the Tech-Track we will be working on an assignment for 'De Volkskrant'.
 
-**The assignment for this course:**  
+**Assignment for De Volkskrant:**  
+Visualise intresting insights about how The Netherlands deals with cars in different regions. Research and visualise data about parkinglots and parkingspaces, look for changes about this subject and compare differences for time, location and/or prices.
+
+**Assignment for this course:**  
 Create a client-side application in JavaScript which dynamically renders data to views using either a front-end framework or system created by you. Reflect on the merits and costs of frameworks together.
 
 ## Features
 
 -   [x] Get external data from API.
--   [ ] Clean external API data that i need.
--   [ ] Transform the data thats clean.
--   [ ] Use D3 to Create Visualisation from clean data.
+-   [ ] Clean external API data.
+-   [ ] Transform cleaned data.
+-   [ ] Use D3 & React to Create Visualisation.
 
 ## Installation
 
@@ -43,7 +47,7 @@ First, clone the repo to your local machine.
 $ git clone https://github.com/GiovanniDw/frontend-data.git
 ```
 
-Then `$ cd/` into the project folder.
+Then `$ cd/frontend-applications` into the project folder and install.
 
 ```zsh
 $ npm install
@@ -63,11 +67,15 @@ Detailed information about te assignments [the Wiki⤴︎](https://github.com/Gi
 
 ### Concept
 
-> A visualisation about which city you can park best on a special day.
+#### Research Questions
 
--   **Op welke speciale dag kun je het beste in de stad parkeren?**
-
--   [Functional Programming ⤴︎](https://github.com/cmda-tt/course-20-21/blob/master/pages/frontend-data/assessment.md)
+-   Wat zijn de mogelijkheden voor P&R parkeren in Nederland?
+    -   P&R mogelijkheden
+        -   per provincie?
+        -   per stad?
+        -   per garage?
+    -   P&R Vergelijken
+        -   Per stad.
 
 ## API's
 

@@ -31,6 +31,7 @@
 
 #provinces .active {
 	visibility: hidden;
+	transition: visibility 0s, opacity 0.5s linear;
 }
 
 #province-borders {

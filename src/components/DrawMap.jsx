@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { ZoomContainer } from './ZoomContainer';
-import { colors } from '../GlobalStyle';
+import { colors, addAlpha } from '../GlobalStyle';
 
 import { geoMercator, geoPath } from 'd3';
 
@@ -80,33 +80,48 @@ const Province = ({ d, isActive, onClick }) => {
 };
 
 const StyledProvincePath = styled.path`
-	transition-duration: 700ms;
+	/* transition-duration: 700ms; */
+
+	:hover {
+		opacity: 0.5;
+	}
 `;
 
-const Circle = ({ cx, cy, r, data, activeProvince }) => {
+const Circle = ({
+	cx,
+	cy,
+	r,
+	data,
+	activeProvince,
+	onMouseEnter,
+	activeCity,
+}) => {
 	const { province, city, capacity } = data;
 
 	if (activeProvince && activeProvince.properties.statnaam == province) {
-		r = r * 2;
+		r = r * 1.5;
 	}
 
-	return <StyledCircle cx={cx} cy={cy} r={r} />;
+	return (
+		<StyledCircle
+			cx={cx}
+			cy={cy}
+			r={r}
+			onMouseEnter={onMouseEnter}
+			active={activeCity}
+		/>
+	);
 };
 
 const StyledCircle = styled.circle`
 	transition-duration: 700ms;
-	fill: ${colors.blue};
+	fill: ${(props) => (props.active ? colors.blue : colors.blue)};
 	fill-opacity: 1;
-
+	stroke: ${(props) => (props.active ? colors.red : colors.blue)};
+	stroke-width: 0.5;
 	&:hover {
 		fill: ${colors.darkBlue};
 	}
-
-	${({ active }) =>
-		active &&
-		`
-    fill: red;
-  `}
 `;
 
 export default DrawMap;

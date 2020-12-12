@@ -41,6 +41,37 @@ const GlobalStyle = createGlobalStyle`
   width: 100%;
   height: 100%;
 }
+
+
+#provinces {
+	fill: ${colors.lightGreen};
+	stroke: ${colors.white};
+}
+
+#provinces .active {
+	opacity: .5;
+	transition: visibility 0s, opacity 0.5s linear;
+}
+
+#province-borders {
+	fill: none;
+	stroke: var(--white);
+	stroke-width: 1;
+	stroke-linejoin: round;
+	stroke-linecap: round;
+	pointer-events: none;
+}
+
+.gemeente-grens {
+	stroke-linejoin: round;
+	stroke-linecap: round;
+	stroke: ${colors.green};
+	stroke-opacity: 1;
+	/* stroke-width: 0.1em; */
+	/* transition-duration: 0.5s; */
+	fill: ${colors.lightGreen};
+}
+
     `;
 
 export default GlobalStyle;

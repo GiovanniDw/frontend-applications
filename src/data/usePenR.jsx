@@ -8,12 +8,14 @@ const row = (d) => {
 	d.province = +d.province;
 	d.latitude = +d.latitude;
 	d.longitude = +d.longitude;
+	d.capacity = +d.capacity;
 	return d;
 };
 
 const cleanPenR = (d) => {
 	d.province = d.province.replace('Fryslân', 'Friesland');
 	// d.name = +d.name.replace()
+	// d.capacity = +d.capacity;
 	return d;
 };
 

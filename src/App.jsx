@@ -6,6 +6,8 @@ import { useNLD } from './data/useNLD';
 import { usePenR } from './data/usePenR';
 import { useWrld } from './data/useWorld';
 
+import useWindowSize from './helpers/useWindowSize';
+
 import { SVGContainer } from './components/SVGContainer';
 import DrawMap from './components/DrawMap';
 import DrawNL from './components/DrawNL';
@@ -16,15 +18,15 @@ const App = () => {
 	const nld = useNLD();
 	const penr = usePenR();
 	const wrld = useWrld();
-
-	if (!nld || !penr || !wrld) {
+	const size = useWindowSize();
+	if (!nld || !penr || !size) {
 		return <pre>Loading...</pre>;
 	}
 
 	return (
 		<div className='App'>
-			<SVGContainer width='100%' height='100%'>
-				<DrawMap nld={nld} penr={penr} wrld={wrld} />
+			<SVGContainer size={size}>
+				<DrawMap size={size} nld={nld} penr={penr} wrld={wrld} />
 				{/* <DrawNL nld={nld} penr={penr} wrld={wrld} /> */}
 			</SVGContainer>
 			{/* <MapNL/> */}

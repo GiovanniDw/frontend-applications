@@ -5,12 +5,13 @@ import { colors, addAlpha } from '../GlobalStyle';
 
 import { geoMercator, geoPath, scaleLinear, max } from 'd3';
 
-const projection = geoMercator().scale(6000).center([5.55, 52.2]);
+const projection = geoMercator().scale(6000).center([5.6, 52.2]);
 const path = geoPath(projection);
 
 export const DrawMap = (props) => {
-	const { gemeente, province, provinceBorder } = props.nld;
-	const { allPenR } = props.penr;
+	const { nld, penr, size } = props;
+	const { gemeente, province, provinceBorder } = nld;
+	const { allPenR } = penr;
 
 	// const provinceEl = useRef(null);
 
@@ -38,7 +39,7 @@ export const DrawMap = (props) => {
 	// useEffect(() => setProvinces(provinceRef.current), []);
 
 	return (
-		<ZoomContainer activeProvince={activeProvince} path={path}>
+		<ZoomContainer activeProvince={activeProvince} path={path} size={size}>
 			<g className='nld'>
 				<g id='gemeentes'>
 					{gemeente.features.map((d) => (
@@ -49,7 +50,7 @@ export const DrawMap = (props) => {
 						/>
 					))}
 				</g>
-				<g id='provinces'>
+				<g id='provinces' className='provinces'>
 					{province.features.map((d) => (
 						<Province
 							data={d}
@@ -73,7 +74,6 @@ export const DrawMap = (props) => {
 							r={1}
 							fill={capacityColors(d.capacity)}
 							data={d}
-							province={d.province}
 							activeProvince={activeProvince}
 							activeCity={activeCity === d.city}
 							onMouseEnter={() => setActiveCity(d.city)}

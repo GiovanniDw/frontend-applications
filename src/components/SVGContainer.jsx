@@ -8,12 +8,19 @@ import React, {
 
 const Context = createContext(null);
 
-export const SVGContainer = ({ children, width, height }) => {
+export const SVGContainer = (props) => {
+	const { size, children } = props;
+	const { width, height } = size;
 	const svgRef = useRef(null);
 	const [svg, setSvg] = useState(null);
 	useEffect(() => setSvg(svgRef.current), []);
 	return (
-		<svg ref={svgRef} width={width} height={height}>
+		<svg
+			ref={svgRef}
+			viewBox={`0 0 ${'800'} ${'800'}`}
+			width={width}
+			height={height}
+		>
 			<Context.Provider value={svg}>{children}</Context.Provider>
 		</svg>
 	);

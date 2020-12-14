@@ -1,9 +1,17 @@
-import { select, zoom, geoPath, selection } from 'd3';
+import {
+	select,
+	zoom,
+	geoPath,
+	selection,
+	selectAll,
+	zoomIdentity,
+	pointer,
+} from 'd3';
 import React, { useState, useEffect } from 'react';
 import { useSvg } from './SVGContainer';
 
 export const ZoomContainer = (props) => {
-	const { children, path, activeProvince } = props;
+	const { children, path, activeProvince, provinces } = props;
 	const svgElement = useSvg();
 
 	const [{ x, y, k }, setTransform] = useState({ x: 0, y: 0, k: 1 });
@@ -38,21 +46,60 @@ export const ZoomContainer = (props) => {
 			console.log(centroid);
 			x = centroid[0];
 			y = centroid[1];
-			k = 4;
+			k = 3;
+			console.log(x, y, k);
+			setCentered(x, y, k);
+			console.log(centered);
+		} else {
+			setCentered(null);
+		}
 
-			setCentered(d);
+		if (centered) {
 			setTransform(centered);
 		}
 	};
 
 	useEffect(() => {
 		if (!svgElement) return;
-		const selection = select(svgElement);
+		const svg = select(svgElement);
+		// const province = select(provinces);
 		const zoomMap = zoom().scaleExtent([1, 8]).on('zoom', zoomed);
-		zoomToProvince(activeProvince);
-		selection.call(zoomMap);
-		return () => selection.on('zoom', null);
-	}, [svgElement, activeProvince]);
+		// console.log(province);
+		// const clicked = (event, d) => {
+		// 	const [[x0, y0], [x1, y1]] = path.bounds(d);
+		// 	event.stopPropagation();
+
+		// 	// if (active.node() === this) reset();
+
+		// 	// active.classed('active', false);
+		// 	// active = select(this).classed('active', true);
+
+		// 	svg.selectAll('path');
+		// 	svg.transition()
+		// 		.duration(750)
+		// 		.call(
+		// 			zoomMap.transform,
+		// 			zoomIdentity
+		// 				.translate(1 / 2, 1 / 2)
+		// 				.scale(
+		// 					Math.min(
+		// 						8,
+		// 						0.9 / Math.max((x1 - x0) / 1, (y1 - y0) / 1)
+		// 					)
+		// 				)
+		// 				.translate(-(x0 + x1) / 2, -(y0 + y1) / 2)
+		// 		);
+		// };
+
+		// province.on('click', clicked);
+
+		// zoomToProvince(activeProvince);
+
+		svg.call(zoomMap);
+		return () => {
+			svg.on('.zoom', null);
+		};
+	}, [svgElement]);
 
 	return <g transform={`translate(${x}, ${y}) scale(${k})`}>{children}</g>;
 };

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect, forwardRef } from 'react';
 import styled from 'styled-components';
 import { ZoomContainer } from './ZoomContainer';
 import { colors, addAlpha } from '../GlobalStyle';
@@ -11,10 +11,11 @@ const path = geoPath(projection);
 export const DrawMap = (props) => {
 	const { gemeente, province, provinceBorder } = props.nld;
 	const { allPenR } = props.penr;
-	const provinces = province.features;
 
 	// const provinceEl = useRef(null);
 
+	// const provinceRef = useRef(null);
+	// const [provinces, setProvinces] = useState(null);
 	const maxCap = (d) => max(d);
 
 	const capacityColors = (d) => {
@@ -30,10 +31,11 @@ export const DrawMap = (props) => {
 			return setActiveProvince(null);
 		}
 	};
-	const provinceRef = useRef();
+
 	const activateCity = (d) => {};
 
 	// useEffect(() => props.svg(activeProvince), []);
+	// useEffect(() => setProvinces(provinceRef.current), []);
 
 	return (
 		<ZoomContainer activeProvince={activeProvince} path={path}>
@@ -48,9 +50,8 @@ export const DrawMap = (props) => {
 					))}
 				</g>
 				<g id='provinces'>
-					{provinces.map((d) => (
+					{province.features.map((d) => (
 						<Province
-							ref={provinceRef}
 							data={d}
 							key={d.id}
 							d={path(d)}

@@ -5,14 +5,13 @@ import { colors, addAlpha } from '../GlobalStyle';
 
 import { geoMercator, geoPath, scaleLinear, max } from 'd3';
 
-const projection = geoMercator().scale(6000).center([5.6, 52.2]);
-const path = geoPath(projection);
-
 export const DrawMap = (props) => {
 	const { nld, penr, size } = props;
 	const { gemeente, province, provinceBorder } = nld;
 	const { allPenR } = penr;
 
+	const projection = geoMercator().scale(6000).center([5.6, 52.2]);
+	const path = geoPath().projection(projection);
 	// const provinceEl = useRef(null);
 
 	// const provinceRef = useRef(null);
@@ -33,13 +32,28 @@ export const DrawMap = (props) => {
 		}
 	};
 
-	const activateCity = (d) => {};
+	const activateCity = (d) => {
+		if (activeCity === null || activeCity !== d.city) {
+			console.log(d);
+			return setActiveCity(d.city);
+		}
+		if (activeCity === d.city) {
+			return setActiveCity(null);
+		}
+	};
 
 	// useEffect(() => props.svg(activeProvince), []);
 	// useEffect(() => setProvinces(provinceRef.current), []);
 
+	useEffect(() => {}, []);
+
 	return (
-		<ZoomContainer activeProvince={activeProvince} path={path} size={size}>
+		<ZoomContainer
+			setActiveProvince={setActiveProvince}
+			activeProvince={activeProvince}
+			path={path}
+			size={size}
+		>
 			<g className='nld'>
 				<g id='gemeentes'>
 					{gemeente.features.map((d) => (
@@ -76,8 +90,7 @@ export const DrawMap = (props) => {
 							data={d}
 							activeProvince={activeProvince}
 							activeCity={activeCity === d.city}
-							onMouseEnter={() => setActiveCity(d.city)}
-							onMouseLeave={() => setActiveCity(null)}
+							onClick={() => activateCity(d)}
 						/>
 					);
 				})}
@@ -111,7 +124,7 @@ const Circle = ({
 	r,
 	data,
 	activeProvince,
-	onMouseEnter,
+	onClick,
 	activeCity,
 	fill,
 }) => {
@@ -126,7 +139,7 @@ const Circle = ({
 			cx={cx}
 			cy={cy}
 			r={r}
-			onMouseEnter={onMouseEnter}
+			onClick={onClick}
 			active={activeCity}
 			fill={fill}
 		/>

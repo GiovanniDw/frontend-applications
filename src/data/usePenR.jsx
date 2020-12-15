@@ -15,7 +15,7 @@ const row = (d) => {
 const cleanPenR = (d) => {
 	d.province = d.province.replace('Fryslân', 'Friesland');
 	// d.name = +d.name.replace()
-	// d.capacity = +d.capacity;
+	d.capacity = +d.capacity;
 	return d;
 };
 

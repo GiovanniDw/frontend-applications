@@ -17,7 +17,7 @@ export const SVGContainer = (props) => {
 	return (
 		<svg
 			ref={svgRef}
-			viewBox={`0 0 ${'800'} ${'800'}`}
+			viewBox={`0 0 ${'800'} ${'600'}`}
 			width={width}
 			height={height}
 		>

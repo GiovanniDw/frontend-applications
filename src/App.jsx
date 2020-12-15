@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 import './App.css';
 import GlobalStyle from './GlobalStyle';
@@ -7,6 +7,7 @@ import { usePenR } from './data/usePenR';
 import { useWrld } from './data/useWorld';
 
 import useWindowSize from './helpers/useWindowSize';
+import useResizeObserver from './helpers/useResizeObserver';
 
 import { SVGContainer } from './components/SVGContainer';
 import DrawMap from './components/DrawMap';
@@ -22,15 +23,23 @@ const App = () => {
 	if (!nld || !penr || !size) {
 		return <pre>Loading...</pre>;
 	}
+	// const wrapperRef = useRef(null);
 
+	// useEffect(() => {
+	// 	// size = wrapperRef.current.getBoundingClientRect();
+	// }, []);
+
+	// const [activeProvince, setActiveProvince] = useState(null);
 	return (
 		<div className='App'>
-			<SVGContainer size={size}>
-				<DrawMap size={size} nld={nld} penr={penr} wrld={wrld} />
-				{/* <DrawNL nld={nld} penr={penr} wrld={wrld} /> */}
-			</SVGContainer>
-			{/* <MapNL/> */}
-			<GlobalStyle />
+			<div>
+				<SVGContainer size={size}>
+					<DrawMap size={size} nld={nld} penr={penr} />
+					{/* <DrawNL nld={nld} penr={penr} wrld={wrld} /> */}
+				</SVGContainer>
+				{/* <MapNL/> */}
+				<GlobalStyle />
+			</div>
 		</div>
 	);
 };

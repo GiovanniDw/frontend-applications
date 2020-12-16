@@ -43,17 +43,17 @@ const GlobalStyle = createGlobalStyle`
 }
 
 
-#provinces {
+.provinces {
 	fill: ${colors.lightGreen};
 	stroke: ${colors.white};
 }
 
-#provinces .active {
+.provinces .active {
 	opacity: .5;
 	transition: visibility 0s, opacity 0.5s linear;
 }
 
-#province-borders {
+.province-borders {
 	fill: none;
 	stroke: var(--white);
 	stroke-width: 1;

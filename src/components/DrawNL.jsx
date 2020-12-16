@@ -6,9 +6,12 @@ import { useSvg } from './SVGContainer';
 import { geoMercator, geoPath, scaleLinear, max, min, select } from 'd3';
 
 export const DrawNL = (props) => {
-	const gRef = useRef();
-	const { gemeente, province, provinceBorder } = props.nld;
-	const { allPenR } = props.penr;
+	const gemeentesRef = useRef(null);
+	const provincesRef = useRef(null);
+	const parkingRef = useRef(null);
+	const { size, nld, penr } = props;
+	const { gemeente, province, provinceBorder } = nld;
+	const { allPenR } = penr;
 
 	// const provinces = province.features;
 
@@ -19,13 +22,30 @@ export const DrawNL = (props) => {
 		.range(['white', 'black']);
 	const [activeProvince, setActiveProvince] = useState(null);
 	const [activeCity, setActiveCity] = useState(null);
+	const [provincesEl, setProvincesEl] = useState(null);
 	// useEffect(() => props.svg(activeProvince), []);
-
+	const activateProvince = (event, d) => {
+		if (activeProvince === null || activeProvince !== d) {
+			console.log(d);
+			return setActiveProvince(d);
+		}
+		if (activeProvince === d) {
+			console.log(d);
+			return setActiveProvince(null);
+		}
+	};
+	const projection = geoMercator().scale(6000).center([5.55, 52.2]);
+	const path = geoPath().projection(projection);
 	useEffect(() => {
 		if (!svgElement) return;
 
 		const svg = select(svgElement);
-		const g = select(gRef.current).attr('class', 'nld');
+
+		const gemeentes = svg.select('.gemeentes').selectAll('path');
+		const provinces = svg.select('.provinces').selectAll('path');
+		const parking = svg.select('.parking-locations').selectAll('circle');
+
+		setProvincesEl(provinces);
 
 		// const minCap = min(allPenR.capacity);
 		// const maxCap = max(allPenR.capacity);
@@ -33,41 +53,47 @@ export const DrawNL = (props) => {
 			.domain([0, 1000])
 			.range(['white', 'black']);
 
-		const projection = geoMercator().scale(6000).center([5.55, 52.2]);
-		const path = geoPath(projection);
+		// const setPoints = (d) => {
+		// 	const [x, y] = projection([d.longitude, d.latitude]);
+		// };
 
-		g.append('g')
-			.attr('id', 'gemeentes')
-			.selectAll('path')
+		gemeentes
 			.data(gemeente.features)
 			.enter()
 			.append('path')
 			.attr('d', path)
 			.attr('class', 'gemeente-grens');
 
-		g.append('g')
-			.attr('id', 'provinces')
-			.selectAll('path')
+		provinces
 			.data(province.features)
 			.enter()
 			.append('path')
 			.attr('d', path)
 			.attr('class', 'province')
-			.on('click', (d) => console.log(d));
+			.on('click', activateProvince);
 
-		g.append('g')
-			.selectAll('circle')
+		parking
 			.data(allPenR)
 			.enter()
 			.append('circle')
 			.attr('r', '1')
 			.attr('cx', (d) => projection([d.longitude, d.latitude])[0])
 			.attr('cy', (d) => projection([d.longitude, d.latitude])[1]);
-	}, [allPenR, activeCity, activeProvince, svgElement, gRef]);
+
+		// parking.transition().duration(500).attr('r', '2');
+	}, [svgElement]);
 
 	return (
-		<ZoomContainer ref={svgElement}>
-			<StyledG ref={gRef}></StyledG>
+		<ZoomContainer
+			size={size}
+			setActiveProvince={setActiveProvince}
+			activeProvince={activeProvince}
+			provinces={provincesEl}
+			path={path}
+		>
+			<g className='gemeentes' />
+			<g className='provinces' />
+			<g className='parking-locations' />
 		</ZoomContainer>
 	);
 };

@@ -64,10 +64,12 @@ export const ZoomContainer = (props) => {
 		}
 
 		svg.call(zoomMap);
-		return () => {
-			svg.on('.zoom', null);
-		};
+		return;
 	}, [svgElement, activeProvince]);
 
-	return <g transform={`translate(${x}, ${y}) scale(${k})`}>{children}</g>;
+	return (
+		<g transform={`translate(${x}, ${y}) scale(${k})`} strokeWidth={1 / k}>
+			{children}
+		</g>
+	);
 };

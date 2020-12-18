@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { ZoomContainer } from './ZoomContainer';
-import { colors, addAlpha } from '../GlobalStyle';
+import { colors, addAlpha } from '../GlobalStyles';
 import { useSvg } from './SVGContainer';
 import { geoMercator, geoPath, scaleLinear, max, min, select } from 'd3';
 
@@ -26,11 +26,9 @@ export const DrawNL = (props) => {
 	// useEffect(() => props.svg(activeProvince), []);
 	const activateProvince = (event, d) => {
 		if (activeProvince === null || activeProvince !== d) {
-			console.log(d);
 			return setActiveProvince(d);
 		}
 		if (activeProvince === d) {
-			console.log(d);
 			return setActiveProvince(null);
 		}
 	};

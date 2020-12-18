@@ -1,3 +1,4 @@
+import React from 'react';
 import { createGlobalStyle } from 'styled-components';
 import { normalize } from 'styled-normalize';
 
@@ -34,18 +35,34 @@ export const addAlpha = (hex, alpha) => {
 	return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 };
 
-const GlobalStyle = createGlobalStyle`
+export const px2vw = (size, width = 1440) => `${(size / width) * 100}vw`;
+
+export const GlobalStyle = createGlobalStyle`
     ${normalize};
 .App {
   background-color: ${colors.white};
   width: 100%;
   height: 100%;
+  margin: 0 auto;
 }
 
+.province {
+	stroke-opacity: 0.5;
+	stroke-width: 1px;
+	/* stroke: none; */
+	stroke-linejoin: round;
+	stroke-linecap: round;
+}
+.gemeente {
+	fill-opacity: 1;
+
+	/* stroke: white; */
+}
 
 .provinces {
 	fill: ${colors.lightGreen};
 	stroke: ${colors.white};
+	transition: 0.3s;
 }
 
 .provinces .active {

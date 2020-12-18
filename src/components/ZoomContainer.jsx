@@ -46,7 +46,7 @@ export const ZoomContainer = (props) => {
 				.call(
 					zoomMap.transform,
 					zoomIdentity
-						.translate(width / 4, height / 4)
+						.translate(width / 2, height / 2)
 						.scale(
 							Math.min(
 								8,

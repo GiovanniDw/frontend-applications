@@ -1,25 +1,45 @@
-import React, { useRef, useState, useEffect, forwardRef } from 'react';
+import React, { useRef, useState, useEffect, forwardRef, useMemo } from 'react';
 import styled from 'styled-components';
 import { ZoomContainer } from './ZoomContainer';
-import { colors, addAlpha } from '../GlobalStyle';
+import { SVGContainer } from './SVGContainer';
+import { colors, addAlpha } from '../GlobalStyles';
 
-import { geoMercator, geoPath, scaleLinear, max } from 'd3';
+import { geoMercator, geoPath, scaleLinear, max, scaleSqrt } from 'd3';
 
+const sizeValue = (d) => d.capacity;
+const maxRadius = 15;
 export const DrawMap = (props) => {
-	const { nld, penr, size, filteredUsage, colorScale, colorValue } = props;
+	const {
+		nld,
+		penr,
+		size,
+		filteredUsage,
+		colorScale,
+		colorValue,
+		selectedUsage,
+		fadeOpacity,
+	} = props;
 	const { gemeente, province, provinceBorder } = nld;
 
-	const projection = geoMercator().scale(6000).center([5.6, 52.2]);
+	const projection = geoMercator().scale(6000).center([5.4, 52.2]);
 	const path = geoPath().projection(projection);
 	// const provinceEl = useRef(null);
 
 	// const provinceRef = useRef(null);
 	// const [provinces, setProvinces] = useState(null);
-	const maxCap = (d) => max(d);
 
 	const capacityColors = (d) => {
 		scaleLinear().domain([1, 1000]).range(['white', 'black']);
 	};
+	console.log(penr);
+	const sizeScale = useMemo(
+		() =>
+			scaleSqrt()
+				.domain([0, max(penr, sizeValue)])
+				.range([0, maxRadius]),
+		[nld, penr, sizeValue, maxRadius]
+	);
+
 	const [activeProvince, setActiveProvince] = useState(null);
 	const [activeCity, setActiveCity] = useState(null);
 
@@ -33,7 +53,6 @@ export const DrawMap = (props) => {
 
 	const activateCity = (d) => {
 		if (activeCity === null || activeCity !== d.city) {
-			console.log(d);
 			return setActiveCity(d.city);
 		}
 		if (activeCity === d.city) {
@@ -72,7 +91,7 @@ export const DrawMap = (props) => {
 			</g>
 
 			<path className='province-borders' d={path(provinceBorder)} />
-			{penr.map((d) => {
+			{/* {penr.map((d) => {
 				const [x, y] = projection([d.longitude, d.latitude]);
 				return (
 					<Circle
@@ -87,7 +106,26 @@ export const DrawMap = (props) => {
 						onClick={() => activateCity(d)}
 					/>
 				);
-			})}
+			})} */}
+			<Marks
+				filteredUsage={filteredUsage}
+				data={penr}
+				projection={projection}
+				colorScale={colorScale}
+				colorValue={colorValue}
+				activeProvince={activeProvince}
+				selectedUsage={selectedUsage}
+				fadeOpacity={fadeOpacity}
+				sizeScale={sizeScale}
+				sizeValue={sizeValue}
+			/>
+			{/* <Marks
+				filteredUsage={filteredUsage}
+				data={filteredUsage}
+				projection={projection}
+				colorScale={colorScale}
+				colorValue={colorValue}
+			/> */}
 		</ZoomContainer>
 	);
 };
@@ -111,31 +149,64 @@ const StyledProvincePath = styled.path`
 	}
 `;
 
-const Circle = ({ cx, cy, r, data, activeProvince, onClick, active, fill }) => {
-	const { province, city, capacity } = data;
-
-	if (activeProvince && activeProvince.properties.statnaam == province) {
-		r = r / 1;
-	}
-
+const Marks = ({
+	data,
+	projection,
+	colorScale,
+	colorValue,
+	filteredUsage,
+	activeProvince,
+	selectedUsage,
+	fadeOpacity,
+	sizeScale,
+	sizeValue,
+}) => {
 	return (
-		<StyledCircle
-			cx={cx}
-			cy={cy}
-			r={r}
-			onClick={onClick}
-			active={active}
-			fill={fill}
-		/>
+		<g className='parking-locations'>
+			{data.map((d) => {
+				const [x, y] = projection([d.longitude, d.latitude]);
+
+				const reduceSizeOnScale = (d) => {
+					if (
+						activeProvince &&
+						activeProvince.properties.statnaam === d.province
+					) {
+						return 1.2;
+					} else if (activeProvince) {
+						return 1;
+					} else {
+						return sizeScale(sizeValue(d));
+					}
+				};
+				console.log(selectedUsage);
+				return (
+					<StyledCircle
+						key={d.id}
+						cx={x}
+						cy={y}
+						r={reduceSizeOnScale(d)}
+						fill={colorScale(colorValue(d))}
+						selectedUsage={selectedUsage}
+						usage={d.usage}
+						opacity={
+							selectedUsage && d.usage !== selectedUsage
+								? fadeOpacity
+								: 0.8
+						}
+					/>
+				);
+			})}
+		</g>
 	);
 };
 
 const StyledCircle = styled.circle`
-	transition-duration: 700ms;
+	transition-duration: 300ms;
 	/* fill: ${(props) => (props.active ? colors.blue : colors.blue)}; */
-	fill-opacity: 0.7;
+	fill-opacity: 1;
 	/* stroke: ${(props) => (props.active ? colors.red : colors.blue)}; */
 	/* stroke-width: 0.5; */
+	stroke-width: ${(props) => (props.active ? 1 : 3)};
 	&:hover {
 		fill: ${colors.darkBlue};
 	}

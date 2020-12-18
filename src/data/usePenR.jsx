@@ -1,13 +1,18 @@
 import { useState, useEffect } from 'react';
-import { csv, group } from 'd3';
+import { csv, group, dsv } from 'd3';
 
 const csvPenR =
 	'https://gist.githubusercontent.com/GiovanniDw/9ebe42d142f40e58e333e546a82f9b0d/raw/1f4e17c5e2a072e12ed5b2dce628413294a13c5e/OpenParkingPenR.csv';
 
 const csvParking =
 	'https://gist.githubusercontent.com/GiovanniDw/9ebe42d142f40e58e333e546a82f9b0d/raw/55947d8316f6ab6cf5aa564229e5461d9414bf5b/openParking.csv';
+
+const parkeerData =
+	'https://gist.githubusercontent.com/GiovanniDw/9ebe42d142f40e58e333e546a82f9b0d/raw/5f69fabb70e85ae64cf19633aadd38fcf26a75a4/parkeerData.csv';
+
+const ssv = '';
+
 const row = (d) => {
-	d.province = +d.province;
 	d.latitude = +d.latitude;
 	d.longitude = +d.longitude;
 	d.capacity = +d.capacity;
@@ -30,18 +35,25 @@ const row = (d) => {
 // 	return data;
 // };
 
+const cleanParkingData = (d) => {
+	// d.province = d.province.replace('Fryslân', 'Friesland');
+	d.id = +d.id;
+	d.usage = d.usage
+		.replace('park and ride', 'P+R Parkeerplaats')
+		.replace('garage', 'Parkeergarage')
+		.replace('terrain', 'Parkeerterrein');
+	d.latitude = +d.latitude;
+	d.longitude = +d.longitude;
+	d.capacity = +d.capacity;
+	// console.log(d);
+
+	return d;
+};
 export const usePenR = () => {
 	const [data, setData] = useState(null);
 	useEffect(() => {
-		const cleanPenR = (d) => {
-			d.province = d.province.replace('Fryslân', 'Friesland');
-			d.latitude = +d.latitude;
-			d.longitude = +d.longitude;
-			d.capacity = +d.capacity;
-
-			return d;
-		};
-		csv(csvParking, cleanPenR).then(setData);
+		// csv(csvParking, cleanParkingData).then(setData);
+		dsv(';', parkeerData, cleanParkingData).then(setData);
 	}, []);
 	return data;
 };

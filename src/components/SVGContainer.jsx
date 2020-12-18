@@ -9,13 +9,14 @@ import React, {
 const Context = createContext(null);
 
 export const SVGContainer = (props) => {
-	const { size, children } = props;
+	const { size, children, className } = props;
 	const { width, height } = size;
 	const svgRef = useRef(null);
 	const [svg, setSvg] = useState(null);
 	useEffect(() => setSvg(svgRef.current), []);
 	return (
 		<svg
+			className={className}
 			ref={svgRef}
 			viewBox={`0 0 ${'800'} ${'600'}`}
 			width={width}

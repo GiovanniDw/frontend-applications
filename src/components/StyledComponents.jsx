@@ -6,7 +6,10 @@ export const Container = styled.div`
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
-	margin: ${px2vw(32)};
+	margin-top: 0;
+	margin-left: ${px2vw(32)};
+	margin-right: ${px2vw(32)};
+	margin-bottom: ${px2vw(32)};
 	max-width: 100%;
 
 	.map {

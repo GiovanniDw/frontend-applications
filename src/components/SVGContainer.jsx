@@ -10,6 +10,7 @@ const Context = createContext(null);
 
 export const SVGContainer = (props) => {
 	const { size, children, className } = props;
+	if (!size) return;
 	const { width, height } = size;
 	const svgRef = useRef(null);
 	const [svg, setSvg] = useState(null);
@@ -18,7 +19,7 @@ export const SVGContainer = (props) => {
 		<svg
 			className={className}
 			ref={svgRef}
-			viewBox={`0 0 ${'800'} ${'600'}`}
+			viewBox={`0 0 ${'800'} ${'800'}`}
 			width={width}
 			height={height}
 		>

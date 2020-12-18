@@ -18,9 +18,12 @@ export const DrawMap = (props) => {
 		colorValue,
 		selectedUsage,
 		fadeOpacity,
+		children,
+		activeProvince,
+		setActiveProvince,
 	} = props;
 	const { gemeente, province, provinceBorder } = nld;
-
+	if (!size) return;
 	const projection = geoMercator().scale(6000).center([5.4, 52.2]);
 	const path = geoPath().projection(projection);
 	// const provinceEl = useRef(null);
@@ -31,7 +34,7 @@ export const DrawMap = (props) => {
 	const capacityColors = (d) => {
 		scaleLinear().domain([1, 1000]).range(['white', 'black']);
 	};
-	console.log(penr);
+
 	const sizeScale = useMemo(
 		() =>
 			scaleSqrt()
@@ -40,7 +43,6 @@ export const DrawMap = (props) => {
 		[nld, penr, sizeValue, maxRadius]
 	);
 
-	const [activeProvince, setActiveProvince] = useState(null);
 	const [activeCity, setActiveCity] = useState(null);
 
 	const activateProvince = (d) => {
@@ -66,67 +68,57 @@ export const DrawMap = (props) => {
 	useEffect(() => {}, []);
 
 	return (
-		<ZoomContainer
-			setActiveProvince={setActiveProvince}
-			activeProvince={activeProvince}
-			path={path}
-			size={size}
-		>
-			<g className='gemeentes'>
-				{gemeente.features.map((d) => (
-					<path key={d.id} className='gemeente-grens' d={path(d)} />
-				))}
-			</g>
-			<g className='provinces'>
-				{province.features.map((d) => (
-					<Province
-						data={d}
-						key={d.id}
-						d={path(d)}
-						title={d.properties.statnaam}
-						active={activeProvince === d}
-						onClick={() => activateProvince(d)}
-					/>
-				))}
-			</g>
-
-			<path className='province-borders' d={path(provinceBorder)} />
-			{/* {penr.map((d) => {
-				const [x, y] = projection([d.longitude, d.latitude]);
-				return (
-					<Circle
-						key={d.id}
-						cx={x}
-						cy={y}
-						r={1}
-						fill={colorScale(colorValue(d))}
-						data={d}
-						activeProvince={activeProvince}
-						active={activeCity === d.city}
-						onClick={() => activateCity(d)}
-					/>
-				);
-			})} */}
-			<Marks
-				filteredUsage={filteredUsage}
-				data={penr}
-				projection={projection}
-				colorScale={colorScale}
-				colorValue={colorValue}
+		<SVGContainer className='map' size={size}>
+			<ZoomContainer
+				setActiveProvince={setActiveProvince}
 				activeProvince={activeProvince}
-				selectedUsage={selectedUsage}
-				fadeOpacity={fadeOpacity}
-				sizeScale={sizeScale}
-				sizeValue={sizeValue}
-			/>
-			{/* <Marks
+				path={path}
+			>
+				<g className='gemeentes'>
+					{gemeente.features.map((d) => (
+						<path
+							key={d.id}
+							className='gemeente-grens'
+							d={path(d)}
+						/>
+					))}
+				</g>
+				<g className='provinces'>
+					{province.features.map((d) => (
+						<Province
+							data={d}
+							key={d.id}
+							d={path(d)}
+							title={d.properties.statnaam}
+							active={activeProvince === d}
+						/>
+					))}
+				</g>
+
+				<path className='province-borders' d={path(provinceBorder)} />
+
+				<Marks
+					filteredUsage={filteredUsage}
+					data={penr}
+					projection={projection}
+					colorScale={colorScale}
+					colorValue={colorValue}
+					activeProvince={activeProvince}
+					selectedUsage={selectedUsage}
+					fadeOpacity={fadeOpacity}
+					sizeScale={sizeScale}
+					sizeValue={sizeValue}
+				/>
+				{/* <Marks
 				filteredUsage={filteredUsage}
 				data={filteredUsage}
 				projection={projection}
 				colorScale={colorScale}
 				colorValue={colorValue}
 			/> */}
-		</ZoomContainer>
+			</ZoomContainer>
+			{children}
+		</SVGContainer>
 	);
 };
 
@@ -178,7 +170,9 @@ const Marks = ({
 						return sizeScale(sizeValue(d));
 					}
 				};
-				console.log(selectedUsage);
+				{
+					/* console.log(selectedUsage); */
+				}
 				return (
 					<StyledCircle
 						key={d.id}

@@ -1,18 +1,28 @@
 import React, { useRef, useState, useEffect, forwardRef, useMemo } from 'react';
 import styled from 'styled-components';
+import useDimensions from 'react-cool-dimensions';
 import { ZoomContainer } from './ZoomContainer';
 import { SVGContainer } from './SVGContainer';
 import { colors, addAlpha } from '../GlobalStyles';
-
-import { geoMercator, geoPath, scaleLinear, max, scaleSqrt } from 'd3';
+import { useRect, useBbox } from '../helpers/useResizeObservers';
+import Legend from './Legend';
+import {
+	geoMercator,
+	geoPath,
+	scaleLinear,
+	max,
+	scaleSqrt,
+	geoCentroid,
+} from 'd3';
 
 const sizeValue = (d) => d.capacity;
-const maxRadius = 15;
+const maxRadius = 10;
 export const DrawMap = (props) => {
 	const {
 		nld,
 		penr,
 		size,
+		setSize,
 		filteredUsage,
 		colorScale,
 		colorValue,
@@ -21,19 +31,21 @@ export const DrawMap = (props) => {
 		children,
 		activeProvince,
 		setActiveProvince,
+		setSelectedUsage,
 	} = props;
-	const { gemeente, province, provinceBorder } = nld;
-	if (!size) return;
-	const projection = geoMercator().scale(6000).center([5.4, 52.2]);
+	const { gemeente, gemeenteBorder, province, provinceBorder } = nld;
+	const [activeCity, setActiveCity] = useState(null);
+	const containerRef = useRef();
+	const dimensions = useRect(containerRef);
+	const { width, height } = dimensions;
+
+	const center = geoCentroid(provinceBorder);
+	const projection = geoMercator()
+		.translate([width / 2, height / 2])
+		.scale(6000)
+		.center(center);
 	const path = geoPath().projection(projection);
-	// const provinceEl = useRef(null);
-
-	// const provinceRef = useRef(null);
-	// const [provinces, setProvinces] = useState(null);
-
-	const capacityColors = (d) => {
-		scaleLinear().domain([1, 1000]).range(['white', 'black']);
-	};
+	const LegendLabel = 'Gebruik';
 
 	const sizeScale = useMemo(
 		() =>
@@ -42,8 +54,6 @@ export const DrawMap = (props) => {
 				.range([0, maxRadius]),
 		[nld, penr, sizeValue, maxRadius]
 	);
-
-	const [activeCity, setActiveCity] = useState(null);
 
 	const activateProvince = (d) => {
 		if (activeProvince === null || activeProvince !== d)
@@ -62,19 +72,23 @@ export const DrawMap = (props) => {
 		}
 	};
 
-	// useEffect(() => props.svg(activeProvince), []);
-	// useEffect(() => setProvinces(provinceRef.current), []);
-
-	useEffect(() => {}, []);
+	useEffect(() => {
+		if (!dimensions) return;
+	}, [dimensions]);
 
 	return (
-		<SVGContainer className='map' size={size}>
-			<ZoomContainer
-				setActiveProvince={setActiveProvince}
-				activeProvince={activeProvince}
-				path={path}
-			>
-				<g className='gemeentes'>
+		<div className='viz-wrapper' ref={containerRef}>
+			<SVGContainer className='map' size={dimensions}>
+				<ZoomContainer
+					setActiveProvince={setActiveProvince}
+					activeProvince={activeProvince}
+					path={path}
+					size={dimensions}
+				>
+					{useMemo(
+						() => (
+							<>
+								{/* <g className='gemeentes'>
 					{gemeente.features.map((d) => (
 						<path
 							key={d.id}
@@ -82,43 +96,71 @@ export const DrawMap = (props) => {
 							d={path(d)}
 						/>
 					))}
-				</g>
-				<g className='provinces'>
-					{province.features.map((d) => (
-						<Province
-							data={d}
-							key={d.id}
-							d={path(d)}
-							title={d.properties.statnaam}
-							active={activeProvince === d}
-						/>
-					))}
-				</g>
+				</g> */}
+								<path
+									className='gemeente-borders'
+									d={path(gemeenteBorder)}
+								/>
+								<g className='provinces'>
+									{province.features.map((d) => (
+										<Province
+											data={d}
+											key={d.id}
+											d={path(d)}
+											title={d.properties.statnaam}
+											active={activeProvince === d}
+											onClick={() => activateProvince(d)}
+										/>
+									))}
+								</g>
 
-				<path className='province-borders' d={path(provinceBorder)} />
-
-				<Marks
-					filteredUsage={filteredUsage}
-					data={penr}
-					projection={projection}
+								<path
+									className='province-borders'
+									d={path(provinceBorder)}
+								/>
+							</>
+						),
+						[path, province, provinceBorder, gemeenteBorder]
+					)}
+					<Marks
+						filteredUsage={filteredUsage}
+						data={penr}
+						projection={projection}
+						colorScale={colorScale}
+						colorValue={colorValue}
+						activeProvince={activeProvince}
+						selectedUsage={selectedUsage}
+						fadeOpacity={fadeOpacity}
+						sizeScale={sizeScale}
+						sizeValue={sizeValue}
+					/>
+					{/* <Marks
+						filteredUsage={filteredUsage}
+						data={filteredUsage}
+						projection={projection}
+						colorScale={colorScale}
+						colorValue={colorValue}
+						sizeValue={sizeValue}
+						sizeScale={sizeScale}
+					/> */}
+				</ZoomContainer>
+				<Legend
+					className='legend'
+					penr={penr}
+					selectUsage={setSelectedUsage}
+					selectedUsage={selectedUsage}
 					colorScale={colorScale}
 					colorValue={colorValue}
-					activeProvince={activeProvince}
-					selectedUsage={selectedUsage}
-					fadeOpacity={fadeOpacity}
-					sizeScale={sizeScale}
-					sizeValue={sizeValue}
+					tickSpacing={22}
+					tickSize={10}
+					tickTextOffset={12}
+					fadeOpacity={0.2}
+					LegendLabel={LegendLabel}
+					dimensions={dimensions}
 				/>
-				{/* <Marks
-				filteredUsage={filteredUsage}
-				data={filteredUsage}
-				projection={projection}
-				colorScale={colorScale}
-				colorValue={colorValue}
-			/> */}
-			</ZoomContainer>
+			</SVGContainer>
 			{children}
-		</SVGContainer>
+		</div>
 	);
 };
 

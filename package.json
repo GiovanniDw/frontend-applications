@@ -47,6 +47,7 @@
 		"framer-motion": "^2.9.4",
 		"lodash": "^4.17.20",
 		"react": "^17.0.1",
+		"react-cool-dimensions": "^1.1.11",
 		"react-dom": "^17.0.1",
 		"react-scripts": "^4.0.1",
 		"react-viz": "^0.0.1",

@@ -36,7 +36,7 @@ const row = (d) => {
 // };
 
 const cleanParkingData = (d) => {
-	// d.province = d.province.replace('Fryslân', 'Friesland');
+	d.province = d.province.replace('Fryslân', 'Friesland');
 	d.id = +d.id;
 	d.usage = d.usage
 		.replace('park and ride', 'P+R Parkeerplaats')

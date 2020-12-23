@@ -24,7 +24,7 @@ export const Legend = ({
 			</div> */}
 			{/* <div> */}
 			{/* <svg className={className}> */}
-			<g transform={`translate(${550 + 60}, 450)`}>
+			<g transform={`translate(${30}, 500)`}>
 				<text x={35} y={-25} className='axis-label' textAnchor='middle'>
 					{LegendLabel}
 				</text>

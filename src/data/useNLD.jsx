@@ -12,6 +12,11 @@ export const useNLD = () => {
 			const { gemeente_2020, provincie_2020 } = topology.objects;
 			setData({
 				gemeente: feature(topology, gemeente_2020),
+				gemeenteBorder: mesh(
+					topology,
+					gemeente_2020,
+					(a, b) => a !== b
+				),
 				province: feature(topology, provincie_2020),
 				provinceBorder: mesh(
 					topology,

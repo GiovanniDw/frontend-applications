@@ -1,11 +1,11 @@
 import React, { useRef, useState, useEffect, forwardRef, useMemo } from 'react';
 import styled from 'styled-components';
 import useDimensions from 'react-cool-dimensions';
-import { ZoomContainer } from './ZoomContainer';
-import { SVGContainer } from './SVGContainer';
-import { colors, addAlpha } from '../GlobalStyles';
-import { useRect, useBbox } from '../helpers/useResizeObservers';
-import Legend from './Legend';
+import { ZoomContainer } from '../ZoomContainer';
+import { SVGContainer } from '../SVGContainer';
+import { colors, addAlpha } from '../../GlobalStyles';
+import { useRect, useBbox } from '../../helpers/useResizeObservers';
+import Legend from '../Legend';
 import {
 	geoMercator,
 	geoPath,
@@ -14,10 +14,10 @@ import {
 	scaleSqrt,
 	geoCentroid,
 } from 'd3';
+import PieChart from '../PieChart';
 
-const sizeValue = (d) => d.capacity;
 const maxRadius = 10;
-export const DrawMap = (props) => {
+export const DrawViz = (props) => {
 	const {
 		nld,
 		penr,
@@ -26,12 +26,13 @@ export const DrawMap = (props) => {
 		filteredUsage,
 		colorScale,
 		colorValue,
-		selectedUsage,
+		sizeValue,
+		hoveredUsage,
 		fadeOpacity,
 		children,
 		activeProvince,
 		setActiveProvince,
-		setSelectedUsage,
+		setHoveredUsage,
 	} = props;
 	const { gemeente, gemeenteBorder, province, provinceBorder } = nld;
 	const [activeCity, setActiveCity] = useState(null);
@@ -129,12 +130,12 @@ export const DrawMap = (props) => {
 						colorScale={colorScale}
 						colorValue={colorValue}
 						activeProvince={activeProvince}
-						selectedUsage={selectedUsage}
+						hoveredUsage={hoveredUsage}
 						fadeOpacity={fadeOpacity}
 						sizeScale={sizeScale}
 						sizeValue={sizeValue}
 					/>
-					{/* <Marks
+					<Marks
 						filteredUsage={filteredUsage}
 						data={filteredUsage}
 						projection={projection}
@@ -142,13 +143,13 @@ export const DrawMap = (props) => {
 						colorValue={colorValue}
 						sizeValue={sizeValue}
 						sizeScale={sizeScale}
-					/> */}
+					/>
 				</ZoomContainer>
 				<Legend
 					className='legend'
 					penr={penr}
-					selectUsage={setSelectedUsage}
-					selectedUsage={selectedUsage}
+					onHover={setHoveredUsage}
+					hoveredUsage={hoveredUsage}
 					colorScale={colorScale}
 					colorValue={colorValue}
 					tickSpacing={22}
@@ -157,6 +158,20 @@ export const DrawMap = (props) => {
 					fadeOpacity={0.2}
 					LegendLabel={LegendLabel}
 					dimensions={dimensions}
+				/>
+				<PieChart
+					penr={penr}
+					hoveredUsage={hoveredUsage}
+					filteredUsage={filteredUsage}
+					colorScale={colorScale}
+					colorValue={colorValue}
+					sizeValue={sizeValue}
+					fadeOpacity={0.2}
+					setActiveProvince={setActiveProvince}
+					activeProvince={activeProvince}
+					setHoveredUsage={setHoveredUsage}
+					dimensions={dimensions}
+					sizeScale={sizeScale}
 				/>
 			</SVGContainer>
 			{children}
@@ -190,7 +205,7 @@ const Marks = ({
 	colorValue,
 	filteredUsage,
 	activeProvince,
-	selectedUsage,
+	hoveredUsage,
 	fadeOpacity,
 	sizeScale,
 	sizeValue,
@@ -205,7 +220,7 @@ const Marks = ({
 						activeProvince &&
 						activeProvince.properties.statnaam === d.province
 					) {
-						return 1.2;
+						return 1;
 					} else if (activeProvince) {
 						return 1;
 					} else {
@@ -213,7 +228,7 @@ const Marks = ({
 					}
 				};
 				{
-					/* console.log(selectedUsage); */
+					/* console.log(hoveredUsage); */
 				}
 				return (
 					<StyledCircle
@@ -222,14 +237,16 @@ const Marks = ({
 						cy={y}
 						r={reduceSizeOnScale(d)}
 						fill={colorScale(colorValue(d))}
-						selectedUsage={selectedUsage}
+						hoveredUsage={hoveredUsage}
 						usage={d.usage}
 						opacity={
-							selectedUsage && d.usage !== selectedUsage
+							hoveredUsage && d.usage !== hoveredUsage
 								? fadeOpacity
 								: 0.8
 						}
-					/>
+					>
+						<title> {d.name}</title>
+					</StyledCircle>
 				);
 			})}
 		</g>
@@ -242,10 +259,10 @@ const StyledCircle = styled.circle`
 	fill-opacity: 1;
 	/* stroke: ${(props) => (props.active ? colors.red : colors.blue)}; */
 	/* stroke-width: 0.5; */
-	stroke-width: ${(props) => (props.active ? 1 : 3)};
+	/* stroke-width: ${(props) => (props.active ? 1 : 3)}; */
 	&:hover {
-		fill: ${colors.darkBlue};
+		stroke: ${colors.white};
 	}
 `;
 
-export default DrawMap;
+export default DrawViz;

@@ -35,25 +35,27 @@ const row = (d) => {
 // 	return data;
 // };
 
-const cleanParkingData = (d) => {
-	d.province = d.province.replace('Fryslân', 'Friesland');
-	d.id = +d.id;
-	d.usage = d.usage
-		.replace('park and ride', 'P+R Parkeerplaats')
-		.replace('garage', 'Parkeergarage')
-		.replace('terrain', 'Parkeerterrein');
-	d.latitude = +d.latitude;
-	d.longitude = +d.longitude;
-	d.capacity = +d.capacity;
-	// console.log(d);
-
-	return d;
-};
 export const usePenR = () => {
 	const [data, setData] = useState(null);
 	useEffect(() => {
+		const cleanParkingData = (d) => {
+			d.province = d.province.replace('Fryslân', 'Friesland');
+			d.id = +d.id;
+			d.usage = d.usage
+				.replace('park and ride', 'P+R Parkeerplaats')
+				.replace('garage', 'Parkeergarage')
+				.replace('terrain', 'Parkeerterrein');
+			d.minimumHeightInMeters = +d.minimumHeightInMeters;
+			d.latitude = +d.latitude;
+			d.longitude = +d.longitude;
+			d.capacity = +d.capacity;
+			// console.log(d);
+
+			return d;
+		};
 		// csv(csvParking, cleanParkingData).then(setData);
 		dsv(';', parkeerData, cleanParkingData).then(setData);
 	}, []);
+	console.log(data);
 	return data;
 };

@@ -16,18 +16,21 @@ import {
 import { SVGContainer } from './components/SVGContainer';
 import { Loading } from './components/Loading';
 import { Container } from './components/StyledComponents';
-import DrawMap from './components/DrawMap';
+import DrawViz from './components/DrawViz/';
 import DrawNL from './components/DrawNL';
-
+import PieChart from './components/PieChart';
 import { geoMercator, geoPath, scaleLinear, max, scaleOrdinal } from 'd3';
 
-const App = () => {
+export const App = () => {
 	const nld = useNLD();
 	const penr = usePenR();
 	const wrld = useWrld();
 
-	const [selectedUsage, setSelectedUsage] = useState(null);
+	const [hoveredUsage, setHoveredUsage] = useState(null);
 	const [activeProvince, setActiveProvince] = useState(null);
+
+	const vizWrapperRef = useRef();
+
 	if (!nld || !penr) {
 		return (
 			<div className='App'>
@@ -39,14 +42,18 @@ const App = () => {
 	// const [container, setContainer] = useState(null);
 
 	const colorValue = (d) => d.usage;
+	const colorRange = [colors.darkBlue, colors.darkGray, colors.yellow];
 
-	const filteredUsage = penr.filter((d) => selectedUsage === colorValue(d));
+	const sizeValue = (d) => d.capacity;
+
+	const filteredUsage = penr.filter((d) => hoveredUsage === colorValue(d));
+
 	const colorScale = scaleOrdinal()
 		.domain(penr.map(colorValue))
-		.range([colors.darkBlue, colors.darkGray, colors.yellow]);
+		.range(colorRange);
 
 	// useEffect(() => {
-	// 	// setSelectedUsage(penr.map(d) => d.usage)
+	// 	// setHoveredUsage(penr.map(d) => d.usage)
 	// 	// if (containerRef.current) {
 	// 	// 	console.log(containerRef);
 	// 	// }
@@ -58,29 +65,40 @@ const App = () => {
 	// 	// 	},
 	// 	// });
 	// }, []);
+	// useEffect(() => {
+	// 	if (!dimensions) return;
 
+	// 	console.log(width);
+	// }, [dimensions]);
 	return (
 		<>
-			<Container>
-				<DrawMap
+			<Container ref={vizWrapperRef}>
+				<DrawViz
 					nld={nld}
 					penr={penr}
-					selectedUsage={selectedUsage}
+					hoveredUsage={hoveredUsage}
 					filteredUsage={filteredUsage}
 					colorScale={colorScale}
 					colorValue={colorValue}
+					sizeValue={sizeValue}
 					fadeOpacity={0.2}
 					setActiveProvince={setActiveProvince}
 					activeProvince={activeProvince}
-					setSelectedUsage={setSelectedUsage}
+					setHoveredUsage={setHoveredUsage}
 				>
 					<h1 className='title'>
 						Parkeer plaatsen van Nederland{' '}
-						{activeProvince
-							? `in ${activeProvince.properties.statnaam}`
-							: ''}
+						<span
+							className='current-province'
+							onClick={() => setActiveProvince(null)}
+						>
+							{activeProvince
+								? `in ${activeProvince.properties.statnaam}`
+								: ''}
+						</span>
 					</h1>
-				</DrawMap>
+				</DrawViz>
+
 				{/* <DrawNL nld={nld} penr={penr} size={size} /> */}
 
 				{/* <MapNL/> */}

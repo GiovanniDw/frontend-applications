@@ -29,7 +29,7 @@ export const ZoomContainer = (props) => {
 		// const height = svg.attr('height');
 		const { width, height } = size;
 
-		const zoomMap = zoom().scaleExtent([1, 8]).on('zoom', zoomed);
+		const zoomMap = zoom().scaleExtent([1, 10]).on('zoom', zoomed);
 
 		const reset = () => {
 			svg.transition()
@@ -73,7 +73,7 @@ export const ZoomContainer = (props) => {
 	}, [svgElement, activeProvince]);
 
 	return (
-		<g transform={`translate(${x}, ${y}) scale(${k})`} strokeWidth={1 / k}>
+		<g transform={`translate(${x}, ${y}) scale(${k})`} strokeWidth={2 / k}>
 			{children}
 		</g>
 	);

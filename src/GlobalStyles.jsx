@@ -52,11 +52,20 @@ export const GlobalStyle = createGlobalStyle`
 		
   }
   #root {
-	  min-width:100vw;
-	  min-height:100vh;
+	  ${'' /* min-width:100vw; */}
+	  ${'' /* min-height:100vh; */}
+	  ${'' /* -webkit-overflow-scrolling: touch; */}
+	  padding-top: min(16px, env(safe-area-inset-top));
+	  padding-left: min(16px, env(safe-area-inset-left));
+        padding-right: min(16px, env(safe-area-inset-right));
+        padding-bottom: min(16px, env(safe-area-inset-bottom));
+		
   }
   :root {
-
+	--safe-area-inset-top   : 16px;
+    --safe-area-inset-right : 16px;
+    --safe-area-inset-bottom: 16px;
+    --safe-area-inset-left  : 16px;  
 	body {
 		background-color: ${colors.white};
 		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
@@ -128,7 +137,7 @@ export const GlobalStyle = createGlobalStyle`
 .provinces {
 	fill: ${colors.lightGreen};
 	stroke: ${colors.white};
-	transition: 0.3s;
+	${'' /* transition: 0.3s; */}
 }
 
 .provinces .active {

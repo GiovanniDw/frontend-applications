@@ -4,14 +4,16 @@ export const Checkbox = (props) => <input type='checkbox' {...props} />;
 export const Legend = ({
 	colorScale,
 	tickSpacing = 25,
-	tickSize = 8,
+	tickSize = 6,
 	tickTextOffset = 25,
-	selectUsage,
-	selectedUsage,
+	onHover,
+	hoveredUsage,
 	fadeOpacity,
 	LegendLabel,
 	className,
+	dimensions,
 }) => {
+	const { width, height } = dimensions;
 	return (
 		<>
 			{/* <div>
@@ -24,8 +26,8 @@ export const Legend = ({
 			</div> */}
 			{/* <div> */}
 			{/* <svg className={className}> */}
-			<g transform={`translate(${30}, 500)`}>
-				<text x={35} y={-25} className='axis-label' textAnchor='middle'>
+			<g transform={`translate(${30}, ${height - 80})`}>
+				<text x={15} y={-25} className='axis-label' textAnchor='middle'>
 					{LegendLabel}
 				</text>
 				{colorScale.domain().map((domainValue, i) => (
@@ -35,17 +37,17 @@ export const Legend = ({
 						transform={`translate(0,${i * tickSpacing})`}
 						onMouseEnter={() => {
 							// console.log(domainValue);
-							selectUsage(domainValue);
+							onHover(domainValue);
 						}}
 						onMouseOut={() => {
-							selectUsage(null);
+							onHover(null);
 						}}
 					>
 						<StyledCircle
 							fill={colorScale(domainValue)}
 							r={tickSize}
 							opacity={
-								selectedUsage && domainValue !== selectedUsage
+								hoveredUsage && domainValue !== hoveredUsage
 									? fadeOpacity
 									: 1
 							}

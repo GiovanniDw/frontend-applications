@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { select, format } from 'd3';
 import { useSvg } from './SVGContainer';
 export const PieChart = (props) => {

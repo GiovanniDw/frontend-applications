@@ -5,17 +5,7 @@ import { useSvg } from './SVGContainer';
 import { useDimensions } from '../helpers/useResizeObservers';
 
 export const Chart = (props) => {
-	const {
-		data,
-		dimensions,
-		sizeScale,
-		sizeValue,
-		colorValue,
-		colorScale,
-		filteredProvince,
-		activeProvince,
-		provinceValue,
-	} = props;
+	const { data, dimensions, colorScale } = props;
 	const { width, height } = dimensions;
 	const dataByUsage = rollups(
 		data,
@@ -47,8 +37,7 @@ export const Chart = (props) => {
 		const selectionWidthUpdate = selectionWithData
 			.enter()
 			.append('g')
-			.attr('class', 'arc')
-			.on('mouseover', (i) => console.log(colorScale(i)));
+			.attr('class', 'arc');
 
 		const path = selectionWidthUpdate
 			.append('path')
@@ -70,8 +59,6 @@ export const Chart = (props) => {
 
 	useEffect(() => {
 		if (!data || !dimensions || !pieChartRef || !pieSize) return;
-
-		console.log(cache);
 
 		drawChart(dataByUsage);
 		cache.current = dataByUsage;

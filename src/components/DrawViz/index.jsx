@@ -1,23 +1,12 @@
-import React, { useRef, useState, useEffect, forwardRef, useMemo } from 'react';
-import styled from 'styled-components';
-import { ZoomContainer } from '../ZoomContainer';
+import React, { useRef, useState, useEffect, useMemo } from 'react';
+
 import { SVGContainer } from '../SVGContainer';
-import { colors, addAlpha } from '../../GlobalStyles';
+
 import { useDimensions, useBbox } from '../../helpers/useResizeObservers';
 import Legend from '../Legend';
 import { Map } from './Map';
-import {
-	geoMercator,
-	geoPath,
-	scaleLinear,
-	max,
-	min,
-	scaleSqrt,
-	geoCentroid,
-	geoBounds,
-	geoDistance,
-} from 'd3';
-import PieChart from '../PieChart';
+import { max, scaleSqrt } from 'd3';
+
 import Chart from '../Chart';
 
 export const DrawViz = (props) => {
@@ -61,7 +50,6 @@ export const DrawViz = (props) => {
 		} else if (activeProvince === d) {
 			setActiveProvince(null);
 			setMaxradius(10);
-			console.log(filteredData);
 		}
 	};
 

@@ -6,24 +6,16 @@ import { useSvg } from './SVGContainer';
 import { geoMercator, geoPath, scaleLinear, max, min, select } from 'd3';
 
 export const DrawNL = (props) => {
-	const gemeentesRef = useRef(null);
-	const provincesRef = useRef(null);
-	const parkingRef = useRef(null);
 	const { size, nld, penr } = props;
 	const { gemeente, province, provinceBorder } = nld;
 	const { allPenR } = penr;
 
-	// const provinces = province.features;
-
 	const svgElement = useSvg();
 
-	const capacityColors = scaleLinear()
-		.domain([1, 1000])
-		.range(['white', 'black']);
 	const [activeProvince, setActiveProvince] = useState(null);
 	const [activeCity, setActiveCity] = useState(null);
 	const [provincesEl, setProvincesEl] = useState(null);
-	// useEffect(() => props.svg(activeProvince), []);
+
 	const activateProvince = (event, d) => {
 		if (activeProvince === null || activeProvince !== d) {
 			return setActiveProvince(d);
@@ -45,15 +37,9 @@ export const DrawNL = (props) => {
 
 		setProvincesEl(provinces);
 
-		// const minCap = min(allPenR.capacity);
-		// const maxCap = max(allPenR.capacity);
 		const capacityColors = scaleLinear()
 			.domain([0, 1000])
 			.range(['white', 'black']);
-
-		// const setPoints = (d) => {
-		// 	const [x, y] = projection([d.longitude, d.latitude]);
-		// };
 
 		gemeentes
 			.data(gemeente.features)
@@ -77,8 +63,6 @@ export const DrawNL = (props) => {
 			.attr('r', '1')
 			.attr('cx', (d) => projection([d.longitude, d.latitude])[0])
 			.attr('cy', (d) => projection([d.longitude, d.latitude])[1]);
-
-		// parking.transition().duration(500).attr('r', '2');
 	}, [svgElement]);
 
 	return (

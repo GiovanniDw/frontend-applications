@@ -1,17 +1,7 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { colors, px2vw } from '../../GlobalStyles';
-import {
-	geoMercator,
-	geoPath,
-	scaleLinear,
-	max,
-	min,
-	scaleSqrt,
-	geoCentroid,
-	geoBounds,
-	geoDistance,
-} from 'd3';
+import { geoMercator, geoPath, geoCentroid, geoBounds, geoDistance } from 'd3';
 import { ZoomContainer } from '../ZoomContainer';
 
 export const Map = (props) => {
@@ -101,7 +91,7 @@ export const Map = (props) => {
 					sizeScale={sizeScale}
 					sizeValue={sizeValue}
 				/>
-				{/* <Marks
+				<Marks
 					filteredUsage={filteredUsage}
 					data={filteredUsage}
 					projection={projection}
@@ -109,7 +99,7 @@ export const Map = (props) => {
 					colorValue={colorValue}
 					sizeValue={sizeValue}
 					sizeScale={sizeScale}
-				/> */}
+				/>
 			</ZoomContainer>
 		</>
 	);

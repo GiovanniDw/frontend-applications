@@ -6,57 +6,6 @@ import {
 	useCallback,
 } from 'react';
 
-/**
- * Hook, that returns the current dimensions of an HTML element.
- * Doesn't play well with SVG.
- */
-
-// export const useResizeObserver = (ref) => {
-// 	const [dimensions, setDimensions] = useState(null);
-// 	useEffect(() => {
-// 		const observeTarget = ref;
-// 		const ro = new ResizeObserver((entries, observer) => {
-// 			for (const entry of entries) {
-// 				const { width, height } = entry.contentRect;
-// 				console.log('Element:', entry.target);
-// 				setDimensions(entry.contentRect);
-// 			}
-// 		});
-// 		ro.observe(observeTarget.current);
-// 	}, [ref.current]);
-// 	return dimensions;
-// };
-
-// export const useResizeObserver;
-
-// export const useObserver = ({ callback, element }) => {
-// 	const current = element && element.current;
-
-// 	const observer = useRef(null);
-
-// 	useEffect(() => {
-// 		// if we are already observing old element
-// 		if (observer && observer.current && current) {
-// 			observer.current.unobserve(current);
-// 		}
-// 		const resizeObserverOrPolyfill = ResizeObserver;
-// 		observer.current = new resizeObserverOrPolyfill(callback);
-// 		observe();
-
-// 		return () => {
-// 			if (observer && observer.current && element && element.current) {
-// 				observer.current.unobserve(element.current);
-// 			}
-// 		};
-// 	}, [current]);
-
-// 	const observe = () => {
-// 		if (element && element.current && observer.current) {
-// 			observer.current.observe(element.current);
-// 		}
-// 	};
-// };
-
 export const useDimensions = (ref) => {
 	const [rect, setRect] = useState(getRect(ref ? ref.current : null));
 
@@ -116,19 +65,3 @@ function getRect(element) {
 
 	return element.getBoundingClientRect();
 }
-
-export const useBbox = () => {
-	const ref = useRef();
-	const [bbox, setBbox] = useState({});
-
-	const set = () =>
-		setBbox(ref && ref.current ? ref.current.getBoundingClientRect() : {});
-
-	useEffect(() => {
-		set();
-		window.addEventListener('resize', set);
-		return () => window.removeEventListener('resize', set);
-	}, []);
-
-	return [bbox, ref];
-};

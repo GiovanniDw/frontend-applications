@@ -1,13 +1,4 @@
-import {
-	select,
-	zoom,
-	geoPath,
-	selection,
-	selectAll,
-	zoomIdentity,
-	pointer,
-	zoomTransform,
-} from 'd3';
+import { select, zoom, zoomIdentity, zoomTransform } from 'd3';
 import React, { useState, useEffect } from 'react';
 import { useSvg } from './SVGContainer';
 

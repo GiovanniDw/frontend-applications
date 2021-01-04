@@ -22,10 +22,9 @@ export const Legend = ({
 
 	useEffect(() => {
 		if (!svgElement) return;
-		// console.log(sizeScale.range());
+
 		const svg = select(svgElement);
 		let circleX = 0;
-		// old size value sizeScale.ticks(3).filter((d) => d)
 
 		const sizeValues = [100, 1000, 2400];
 		const selection = select(sizeLegendRef.current);
@@ -57,22 +56,10 @@ export const Legend = ({
 			.attr('dy', '1.3em')
 			.text(format('.0f'))
 			.attr('class', 'legend-text');
-
-		// selection.append('text').text('hi');
 	}, [svgElement, sizeLegendRef]);
 
 	return (
 		<>
-			{/* <div>
-				{colorScale.domain().map((domainValue, i) => (
-					<label key={i}>
-						<Checkbox value={domainValue} checked />
-						<span>{domainValue}</span>
-					</label>
-				))}
-			</div> */}
-			{/* <div> */}
-			{/* <svg className={className}> */}
 			<g transform={`translate(${width - 20}, ${100})`} textAnchor='end'>
 				<g className='color-legend'>
 					<text x={0} y={-25} className='legend-label'>
@@ -84,7 +71,6 @@ export const Legend = ({
 							className='tick'
 							transform={`translate(0,${i * tickSpacing})`}
 							onMouseEnter={() => {
-								// console.log(domainValue);
 								onHover(domainValue);
 							}}
 							onMouseOut={() => {
@@ -108,9 +94,6 @@ export const Legend = ({
 				</g>
 				<g ref={sizeLegendRef} className='size-legend'></g>
 			</g>
-
-			{/* </svg> */}
-			{/* </div> */}
 		</>
 	);
 };

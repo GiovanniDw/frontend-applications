@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import useDimensions from 'react-cool-dimensions';
 import { GlobalStyle, colors, px2vw } from './GlobalStyles.jsx';
 import { useNLD } from './data/useNLD';
-import { usePenR } from './data/usePenR';
+import { useParkingData } from './data/useParkingData';
 import { useWrld } from './data/useWorld';
 
 import useWindowSize from './helpers/useWindowSize';
@@ -23,7 +23,7 @@ import { geoMercator, geoPath, scaleLinear, max, scaleOrdinal } from 'd3';
 
 export const App = () => {
 	const nld = useNLD();
-	const penr = usePenR();
+	const data = useParkingData();
 	const wrld = useWrld();
 
 	const [hoveredUsage, setHoveredUsage] = useState(null);
@@ -31,7 +31,7 @@ export const App = () => {
 
 	const vizWrapperRef = useRef();
 
-	if (!nld || !penr) {
+	if (!nld || !data) {
 		return (
 			<div className='App'>
 				<Loading />
@@ -42,14 +42,24 @@ export const App = () => {
 	// const [container, setContainer] = useState(null);
 
 	const colorValue = (d) => d.usage;
+	const provinceValue = (d) => d.province;
+
 	const colorRange = [colors.darkBlue, colors.darkGray, colors.yellow];
 
 	const sizeValue = (d) => d.capacity;
 
-	const filteredUsage = penr.filter((d) => hoveredUsage === colorValue(d));
+	const sizeRange = [];
+
+	const filteredUsage = data.allData.filter(
+		(d) => hoveredUsage === colorValue(d)
+	);
+
+	const filteredProvince = data.allData.filter(
+		(d) => activeProvince === provinceValue(d)
+	);
 
 	const colorScale = scaleOrdinal()
-		.domain(penr.map(colorValue))
+		.domain(data.allData.map(colorValue))
 		.range(colorRange);
 
 	// useEffect(() => {
@@ -73,11 +83,13 @@ export const App = () => {
 	return (
 		<>
 			<Container ref={vizWrapperRef}>
+				{console.log(data.nested)}
 				<DrawViz
 					nld={nld}
-					penr={penr}
+					data={data}
 					hoveredUsage={hoveredUsage}
 					filteredUsage={filteredUsage}
+					filteredProvince={filteredProvince}
 					colorScale={colorScale}
 					colorValue={colorValue}
 					sizeValue={sizeValue}

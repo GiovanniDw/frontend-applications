@@ -84,14 +84,14 @@ export const GlobalStyle = createGlobalStyle`
 		monospace;
 }
 
-      font-size: ${px2vw(24)};
+      font-size: ${px2vw(30)};
 
       @media (min-width: 768px) {
-        font-size: ${px2vw(24)};
+        font-size: ${px2vw(35)};
       }
 
       @media (min-width: 1024px) {
-        font-size: ${px2vw(24)};
+        font-size: ${px2vw(40)};
       }
     }
 
@@ -129,7 +129,7 @@ export const GlobalStyle = createGlobalStyle`
 .gemeente-borders{
 	fill: none;
 	stroke: ${colors.lightGreen};
-	stroke-width: 1;
+	${'' /* stroke-width: 1; */}
 	stroke-linejoin: round;
 	${'' /* stroke-linecap: round; */}
 	pointer-events: none;
@@ -142,7 +142,7 @@ export const GlobalStyle = createGlobalStyle`
 
 .provinces .active {
 	opacity: .8;
-	transition: visibility 0s, opacity 0.5s linear;
+	transition: visibility 0s, opacity 0.3s linear;
 }
 
 .province-borders {

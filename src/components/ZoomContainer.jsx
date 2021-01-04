@@ -12,7 +12,7 @@ import React, { useState, useEffect } from 'react';
 import { useSvg } from './SVGContainer';
 
 export const ZoomContainer = (props) => {
-	const { children, path, activeProvince, setActiveProvince, size } = props;
+	const { children, path, activeProvince, setActiveProvince } = props;
 
 	const svgElement = useSvg();
 
@@ -23,11 +23,10 @@ export const ZoomContainer = (props) => {
 	};
 
 	useEffect(() => {
-		if (!svgElement || !size) return;
+		if (!svgElement) return;
 		const svg = select(svgElement);
-		// const width = svg.attr('width');
-		// const height = svg.attr('height');
-		const { width, height } = size;
+		const width = svg.attr('width');
+		const height = svg.attr('height');
 
 		const zoomMap = zoom().scaleExtent([1, 10]).on('zoom', zoomed);
 
@@ -73,7 +72,7 @@ export const ZoomContainer = (props) => {
 	}, [svgElement, activeProvince]);
 
 	return (
-		<g transform={`translate(${x}, ${y}) scale(${k})`} strokeWidth={2 / k}>
+		<g transform={`translate(${x}, ${y}) scale(${k})`} strokeWidth={1 / k}>
 			{children}
 		</g>
 	);

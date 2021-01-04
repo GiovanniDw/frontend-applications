@@ -28,14 +28,13 @@ export const Legend = ({
 		// old size value sizeScale.ticks(3).filter((d) => d)
 
 		const sizeValues = [100, 1000, 2400];
-		const selection = svg.select('.size-legend');
+		const selection = select(sizeLegendRef.current);
 
 		selection
 			.append('text')
 			.text('Capaciteit Parkeergarage')
 			.attr('transform', `translate(${circleX},80)`)
-			.attr('font-weight', 'bold')
-			.attr('class', 'legend-text');
+			.attr('class', 'legend-label');
 
 		const sizelegendG = selection
 			.append('g')
@@ -76,7 +75,7 @@ export const Legend = ({
 			{/* <svg className={className}> */}
 			<g transform={`translate(${width - 20}, ${100})`} textAnchor='end'>
 				<g className='color-legend'>
-					<text x={0} y={-25} className='axis-label'>
+					<text x={0} y={-25} className='legend-label'>
 						{LegendLabel}
 					</text>
 					{colorScale.domain().map((domainValue, i) => (

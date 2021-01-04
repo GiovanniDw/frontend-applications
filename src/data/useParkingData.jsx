@@ -107,8 +107,8 @@ export const useParkingData = () => {
 			const allData = d;
 
 			const nested = nestData(d);
-
-			setData({ allData: d, byUsage: byUsage(d), nested: nested });
+			const usage = byUsage(d);
+			setData({ allData: d, byUsage: usage, nested: nested });
 		});
 	}, []);
 

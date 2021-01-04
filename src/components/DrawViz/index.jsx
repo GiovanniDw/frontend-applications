@@ -1,10 +1,9 @@
 import React, { useRef, useState, useEffect, forwardRef, useMemo } from 'react';
 import styled from 'styled-components';
-import useDimensions from 'react-cool-dimensions';
 import { ZoomContainer } from '../ZoomContainer';
 import { SVGContainer } from '../SVGContainer';
 import { colors, addAlpha } from '../../GlobalStyles';
-import { useRect, useBbox } from '../../helpers/useResizeObservers';
+import { useDimensions, useBbox } from '../../helpers/useResizeObservers';
 import Legend from '../Legend';
 import { Map } from './Map';
 import {
@@ -26,7 +25,7 @@ export const DrawViz = (props) => {
 		nld,
 		data,
 		filteredUsage,
-		filteredProvince,
+		filteredData,
 		colorScale,
 		colorValue,
 		sizeValue,
@@ -42,8 +41,7 @@ export const DrawViz = (props) => {
 	const [activeCity, setActiveCity] = useState(null);
 	const [maxRadius, setMaxradius] = useState(10);
 	const containerRef = useRef();
-	const dimensions = useRect(containerRef);
-	const { width, height } = dimensions;
+	const dimensions = useDimensions(containerRef);
 
 	const sizeScale = useMemo(
 		() =>
@@ -63,6 +61,7 @@ export const DrawViz = (props) => {
 		} else if (activeProvince === d) {
 			setActiveProvince(null);
 			setMaxradius(10);
+			console.log(filteredData);
 		}
 	};
 
@@ -84,7 +83,7 @@ export const DrawViz = (props) => {
 			<SVGContainer className='map' size={dimensions}>
 				<Map
 					nld={nld}
-					data={allData}
+					data={filteredData}
 					colorScale={colorScale}
 					colorValue={colorValue}
 					activeProvince={activeProvince}
@@ -113,22 +112,10 @@ export const DrawViz = (props) => {
 					dimensions={dimensions}
 					sizeScale={sizeScale}
 				/>
-				{/* <PieChart
-					data={allData}
-					hoveredUsage={hoveredUsage}
-					filteredUsage={filteredUsage}
-					colorScale={colorScale}
-					colorValue={colorValue}
-					sizeValue={sizeValue}
-					fadeOpacity={0.2}
-					setActiveProvince={setActiveProvince}
-					activeProvince={activeProvince}
-					setHoveredUsage={setHoveredUsage}
-					dimensions={dimensions}
-					sizeScale={sizeScale}
-				/> */}
+
 				<Chart
-					data={allData}
+					data={filteredData}
+					onHover={setHoveredUsage}
 					hoveredUsage={hoveredUsage}
 					filteredUsage={filteredUsage}
 					colorScale={colorScale}

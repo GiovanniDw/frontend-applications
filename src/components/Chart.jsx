@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { select, format, pie, arc, rollup, path } from 'd3';
+import { select, pie, arc, rollups, interpolate } from 'd3';
 import { useSvg } from './SVGContainer';
+
+import { useDimensions } from '../helpers/useResizeObservers';
+
 export const Chart = (props) => {
 	const {
 		data,
@@ -9,63 +12,78 @@ export const Chart = (props) => {
 		sizeValue,
 		colorValue,
 		colorScale,
+		filteredProvince,
+		activeProvince,
+		provinceValue,
 	} = props;
 	const { width, height } = dimensions;
+	const dataByUsage = rollups(
+		data,
+		(v) => v.length,
+		(d) => d.usage
+	);
+
 	const svgElement = useSvg();
 	const pieChartRef = useRef();
-	useEffect(() => {
-		if (!svgElement || !data || !dimensions) return;
-		// console.log(sizeScale.range());
+	const cache = useRef(dataByUsage);
+	const pieSize = useDimensions(pieChartRef);
 
-		const totalUsage = rollup(
-			data,
-			(v) => v.length,
-			(d) => d.usage
-		);
-		const radius = 180;
-		const pieVal = pie().value((d) => d);
-		const path = arc()
-			.outerRadius(Math.min(width, height) / 2 - 1)
-			.innerRadius(0)
-			.startAngle((d) => d)
-			.endAngle((d) => d);
+	const drawChart = (dataByUsage) => {
+		const outerRadius = Math.min(width, height) / 10 - 1;
 
-		const fakeData = { a: 9, b: 20, c: 30, d: 8, e: 12 };
+		const pieGenerator = pie()
+			.padAngle(0)
+			.value((d) => d[1])
+			.sort(null);
+		const arcGenerator = arc().innerRadius(20).outerRadius(outerRadius);
 
-		// const arc = arc()
-		// 	.innerRadius(0)
-		// 	.outerRadius(Math.min(width, height) / 2 - 1);
-		const svg = select(svgElement);
+		const pieData = pieGenerator(dataByUsage);
+		const prevPieData = pieGenerator(cache.current);
 
-		const selection = svg.select('.pie-chart');
+		const selection = select(pieChartRef.current);
+		const selectionWithData = selection.selectAll('g.arc').data(pieData);
+		selectionWithData.exit().remove();
 
-		selection
-			.selectAll('.arc')
-			.data(totalUsage)
+		const selectionWidthUpdate = selectionWithData
 			.enter()
+			.append('g')
+			.attr('class', 'arc')
+			.on('mouseover', (i) => console.log(colorScale(i)));
+
+		const path = selectionWidthUpdate
 			.append('path')
-			.attr('d', pieVal)
-			.attr('fill', function (d) {
-				return console.log(d);
-			})
-			.attr('stroke', 'white')
-			.style('stroke-width', '2px')
-			.style('opacity', 0.7);
+			.merge(selectionWithData.select('path.arc'));
 
-		selection.append('path').attr('d', path).attr('fill', 'red');
-		// .attr('stroke', 'white')
-		// .selectAll('path')
-		// .data(arcs)
-		// .join('path')
-		// .attr('fill', (d) => colorScale(d.usage))
-		// .attr('d', arcc)
-		// .append('title');
+		const arcTween = (d, i) => {
+			const interpolator = interpolate(prevPieData[i], d);
 
-		// selection.append('text').text('hi');
-	}, [svgElement, data, pieChartRef]);
+			return (t) => arcGenerator(interpolator(t));
+		};
+
+		path.attr('class', 'arc')
+			.transition()
+			.attrTween('d', arcTween)
+			.style('fill', (i) => colorScale(i.data[0]))
+			.style('stroke', '#ffffff')
+			.style('stroke-width', 2);
+	};
+
+	useEffect(() => {
+		if (!data || !dimensions || !pieChartRef || !pieSize) return;
+
+		console.log(cache);
+
+		drawChart(dataByUsage);
+		cache.current = dataByUsage;
+	}, [svgElement, data, pieChartRef, dimensions]);
+
 	return (
 		<>
-			<g transform={`translate(${width - 4}, ${height - 500})`}>
+			<g
+				transform={`translate(${width - 10 - pieSize.width / 2}, ${
+					height - 10 - pieSize.width / 2
+				})`}
+			>
 				<g ref={pieChartRef} className='pie-chart'></g>
 			</g>
 		</>

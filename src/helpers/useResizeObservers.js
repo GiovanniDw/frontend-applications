@@ -57,7 +57,7 @@ import {
 // 	};
 // };
 
-export const useRect = (ref) => {
+export const useDimensions = (ref) => {
 	const [rect, setRect] = useState(getRect(ref ? ref.current : null));
 
 	const handleResize = useCallback(() => {

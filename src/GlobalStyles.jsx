@@ -164,6 +164,10 @@ export const GlobalStyle = createGlobalStyle`
 	fill: ${colors.lightGreen};
 }
 
+.legend-label {
+	font-weight:bold;
+}
+
     `;
 
 export default GlobalStyle;

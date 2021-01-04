@@ -101,7 +101,7 @@ export const Map = (props) => {
 					sizeScale={sizeScale}
 					sizeValue={sizeValue}
 				/>
-				<Marks
+				{/* <Marks
 					filteredUsage={filteredUsage}
 					data={filteredUsage}
 					projection={projection}
@@ -109,7 +109,7 @@ export const Map = (props) => {
 					colorValue={colorValue}
 					sizeValue={sizeValue}
 					sizeScale={sizeScale}
-				/>
+				/> */}
 			</ZoomContainer>
 		</>
 	);

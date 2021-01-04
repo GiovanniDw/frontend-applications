@@ -54,10 +54,16 @@ export const App = () => {
 		(d) => hoveredUsage === colorValue(d)
 	);
 
-	const filteredProvince = data.allData.filter(
-		(d) => activeProvince === provinceValue(d)
-	);
-
+	const filterData = () => {
+		try {
+			return data.allData.filter(
+				(d) => activeProvince.properties.statnaam === provinceValue(d)
+			);
+		} catch (error) {
+			return data.allData;
+		}
+	};
+	const filteredData = filterData();
 	const colorScale = scaleOrdinal()
 		.domain(data.allData.map(colorValue))
 		.range(colorRange);
@@ -83,13 +89,12 @@ export const App = () => {
 	return (
 		<>
 			<Container ref={vizWrapperRef}>
-				{console.log(data.nested)}
 				<DrawViz
 					nld={nld}
 					data={data}
 					hoveredUsage={hoveredUsage}
 					filteredUsage={filteredUsage}
-					filteredProvince={filteredProvince}
+					filteredData={filteredData}
 					colorScale={colorScale}
 					colorValue={colorValue}
 					sizeValue={sizeValue}

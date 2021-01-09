@@ -8,28 +8,29 @@ export const ZoomContainer = (props) => {
 	const svgElement = useSvg();
 
 	const [{ x, y, k }, setTransform] = useState({ x: 0, y: 0, k: 1 });
-	const zoomed = (event) => {
-		const { transform } = event;
-		setTransform(transform);
-	};
 
 	useEffect(() => {
 		if (!svgElement) return;
 		const svg = select(svgElement);
-		const width = svg.attr('width');
-		const height = svg.attr('height');
+		const width = svg.clientWidth;
+		const height = svg.clientHeight;
+
+		const zoomed = (event) => {
+			const { transform } = event;
+			setTransform(transform);
+		};
 
 		const zoomMap = zoom().scaleExtent([1, 10]).on('zoom', zoomed);
 
 		const reset = () => {
+			setActiveProvince(null);
 			svg.transition()
 				.duration(750)
 				.call(
 					zoomMap.transform,
 					zoomIdentity,
-					zoomTransform(svg.node()).invert([width / 2, height / 2])
+					zoomTransform(svg).invert([width / 2, height / 2])
 				);
-			setActiveProvince(null);
 		};
 		const currentProvince = select(activeProvince).node();
 

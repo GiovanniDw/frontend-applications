@@ -35,9 +35,9 @@ export const DrawViz = (props) => {
 	const sizeScale = useMemo(
 		() =>
 			scaleSqrt()
-				.domain([0, max(allData, sizeValue)])
+				.domain([0, max(data, sizeValue)])
 				.range([0, maxRadius]),
-		[nld, data, sizeValue, maxRadius]
+		[data, sizeValue, maxRadius]
 	);
 
 	const LegendLabel = 'Soort Parkeermogelijkheid';
@@ -71,7 +71,7 @@ export const DrawViz = (props) => {
 			<SVGContainer className='map' size={dimensions}>
 				<Map
 					nld={nld}
-					data={filteredData}
+					data={data}
 					colorScale={colorScale}
 					colorValue={colorValue}
 					activeProvince={activeProvince}
@@ -87,7 +87,7 @@ export const DrawViz = (props) => {
 
 				<Legend
 					className='legend'
-					data={allData}
+					data={data}
 					onHover={setHoveredUsage}
 					hoveredUsage={hoveredUsage}
 					colorScale={colorScale}

@@ -50,6 +50,7 @@
 		"react-cool-dimensions": "^1.1.11",
 		"react-dom": "^17.0.1",
 		"react-scripts": "^4.0.1",
+		"react-spring": "^8.0.27",
 		"react-viz": "^0.0.1",
 		"styled-components": "^5.2.1",
 		"styled-content-loader": "^1.1.3",

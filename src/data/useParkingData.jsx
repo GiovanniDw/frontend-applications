@@ -1,7 +1,17 @@
 import { useState, useEffect } from 'react';
-import { csv, group, dsv, map, rollups, rollup, autoType, nest } from 'd3';
+import {
+	csv,
+	group,
+	dsv,
+	map,
+	rollups,
+	rollup,
+	autoType,
+	nest,
+	scaleOrdinal,
+} from 'd3';
 import { sum } from 'lodash';
-
+import { GlobalStyle, colors, px2vw } from '../GlobalStyles';
 const csvPenR =
 	'https://gist.githubusercontent.com/GiovanniDw/9ebe42d142f40e58e333e546a82f9b0d/raw/1f4e17c5e2a072e12ed5b2dce628413294a13c5e/OpenParkingPenR.csv';
 
@@ -86,7 +96,7 @@ const nestData = (data) => {
 
 	return nestedData;
 };
-
+const colorRange = [colors.darkBlue, colors.darkGray, colors.yellow];
 export const useParkingData = () => {
 	const [data, setData] = useState(null);
 	useEffect(() => {
@@ -108,7 +118,7 @@ export const useParkingData = () => {
 
 			const nested = nestData(d);
 			const usage = byUsage(d);
-			setData({ allData: d, byUsage: usage, nested: nested });
+			setData(d);
 		});
 	}, []);
 

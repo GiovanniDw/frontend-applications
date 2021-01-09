@@ -84,22 +84,24 @@ export const GlobalStyle = createGlobalStyle`
 		monospace;
 }
 
-      font-size: ${px2vw(30)};
+      font-size: 14px;
 
       @media (min-width: 768px) {
-        font-size: ${px2vw(35)};
+        font-size: 16px;
       }
 
       @media (min-width: 1024px) {
-        font-size: ${px2vw(40)};
+        font-size: 18px;
       }
     }
 
 
 .App {
   background-color: ${colors.white};
-  max-width:100vw;
-	max-height:100vh;
+  width:100vw;
+	height:100vh;
+	max-height:100%;
+	max-width:100%;
   ${'' /* margin: 0 auto; */}
 }
 .viz-wrapper {
@@ -107,7 +109,7 @@ export const GlobalStyle = createGlobalStyle`
 	height:100%;
 	display:flex;
 	position:relative;
-
+	padding-bottom:calc(50px + env(safe-area-inset-bottom));
 	.title {
 		position: absolute;
 		padding-left:1em;

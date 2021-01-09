@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useRef } from 'react';
+import { useSpring, useTransition, animated, useTrail } from 'react-spring';
 import styled from 'styled-components';
 import { colors, px2vw } from '../../GlobalStyles';
 import { geoMercator, geoPath, geoCentroid, geoBounds, geoDistance } from 'd3';
@@ -22,11 +23,14 @@ export const Map = (props) => {
 	} = props;
 	const { gemeente, gemeenteBorder, province, provinceBorder } = nld;
 	const { width, height } = dimensions;
+
+	const [currentCenter, setCurrentCenter] = useState(province);
+
 	const projection = geoMercator().translate([width / 2, height / 2]);
 
 	const path = geoPath().projection(projection);
-	const center = geoCentroid(province);
-	const bounds = geoBounds(province);
+	const center = geoCentroid(currentCenter);
+	const bounds = geoBounds(currentCenter);
 	const distance = geoDistance(bounds[1], bounds[0]);
 	const scale = width / distance / Math.sqrt(2);
 
@@ -136,26 +140,13 @@ const Marks = ({
 	sizeScale,
 	sizeValue,
 }) => {
+	const springRef = useRef();
+
 	return (
 		<g className='parking-locations'>
 			{data.map((d) => {
 				const [x, y] = projection([d.longitude, d.latitude]);
 
-				const reduceSizeOnScale = (d) => {
-					if (
-						activeProvince &&
-						activeProvince.properties.statnaam === d.province
-					) {
-						return 1;
-					} else if (activeProvince) {
-						return 1;
-					} else {
-						return sizeScale(sizeValue(d));
-					}
-				};
-				{
-					/* console.log(hoveredUsage); */
-				}
 				return (
 					<StyledCircle
 						key={d.id}
@@ -163,8 +154,8 @@ const Marks = ({
 						cy={y}
 						r={sizeScale(sizeValue(d))}
 						fill={colorScale(colorValue(d))}
-						hoveredUsage={hoveredUsage}
-						usage={d.usage}
+						value={d.usage}
+						// isShowing={filteredUsage.includes(d)}
 						opacity={
 							hoveredUsage && d.usage !== hoveredUsage
 								? fadeOpacity
@@ -179,7 +170,17 @@ const Marks = ({
 	);
 };
 
-const StyledCircle = styled.circle`
+// const Circle = (props) => {
+// 	const style = useSpring({
+// 		config: {
+// 			duration: 200,
+// 		},
+// 		opacity: props.isShowing ? 0 : 1,
+// 	});
+// 	return <StyledCircle style={style} {...props}></StyledCircle>;
+// };
+
+const StyledCircle = styled(animated.circle)`
 	transition-duration: 300ms;
 	/* fill: ${(props) => (props.active ? colors.blue : colors.blue)}; */
 	fill-opacity: 1;

@@ -5,15 +5,15 @@ import { px2vw, colors } from '../GlobalStyles';
 export const Container = styled.div`
 	display: flex;
 	flex-wrap: wrap;
+	align-items: stretch;
 	justify-content: center;
 	padding-top: ${px2vw(32)};
 	padding-left: ${px2vw(32)};
 	padding-right: ${px2vw(32)};
 	padding-bottom: ${px2vw(32)};
 	max-width: 100%;
-	min-height: 100%;
+	height: 100%;
 
-	height: 100vh;
 	.map {
 		border: 1px solid red;
 	}

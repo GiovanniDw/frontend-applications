@@ -26,7 +26,7 @@ export const Legend = ({
 		const svg = select(svgElement);
 		let circleX = 0;
 
-		const sizeValues = [100, 1000, 2400];
+		const sizeValues = [100, 1000, 2500];
 		const selection = select(sizeLegendRef.current);
 
 		selection
@@ -38,7 +38,7 @@ export const Legend = ({
 		const sizelegendG = selection
 			.append('g')
 			.attr('fill', '#444')
-			.attr('transform', `translate(${circleX},120)`)
+			.attr('transform', `translate(${circleX},140)`)
 			.attr('text-anchor', 'end')
 			.selectAll('g')
 			.data(sizeValues)
@@ -51,7 +51,7 @@ export const Legend = ({
 			.attr('r', sizeScale);
 		sizelegendG
 			.append('text')
-			.attr('y', (d) => -10 - 2 * sizeScale(d))
+			.attr('y', (d) => -10 - 3 * sizeScale(d))
 			.attr('x', tickTextOffset)
 			.attr('dy', '1.3em')
 			.text(format('.0f'))

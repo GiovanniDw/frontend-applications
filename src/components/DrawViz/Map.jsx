@@ -28,7 +28,7 @@ export const Map = (props) => {
 	const center = geoCentroid(currentCenter);
 	const bounds = geoBounds(currentCenter);
 	const distance = geoDistance(bounds[1], bounds[0]);
-	const scale = width / distance / Math.sqrt(2);
+	const scale = width / distance / Math.sqrt(4);
 
 	const projection = geoMercator().scale(scale).center(center);
 

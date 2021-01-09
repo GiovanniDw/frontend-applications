@@ -73,7 +73,6 @@ export const App = () => {
 		.range(colorRange);
 
 	// useEffect(() => {
-	// 	if (!data) return;
 	// 	if (data.length) {
 	// 		const formattedData = formatData(data);
 	// 		setParkingData((prevState) => ({

@@ -14,6 +14,7 @@ export const Chart = (props) => {
 	);
 
 	const svgElement = useSvg();
+
 	const pieChartRef = useRef();
 	const cache = useRef(dataByUsage);
 	const pieSize = useDimensions(pieChartRef);

@@ -109,6 +109,7 @@ export const GlobalStyle = createGlobalStyle`
 	height:100%;
 	display:flex;
 	position:relative;
+	padding-bottom:50px;
 	padding-bottom:calc(50px + env(safe-area-inset-bottom));
 	.title {
 		position: absolute;
@@ -122,6 +123,9 @@ export const GlobalStyle = createGlobalStyle`
 	/* stroke: none; */
 	stroke-linejoin: round;
 	stroke-linecap: round;
+
+&:hover {opacity:0.9;}
+
 }
 .gemeente {
 	fill-opacity: 1;

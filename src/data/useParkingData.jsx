@@ -97,6 +97,7 @@ const nestData = (data) => {
 	return nestedData;
 };
 const colorRange = [colors.darkBlue, colors.darkGray, colors.yellow];
+
 export const useParkingData = () => {
 	const [data, setData] = useState(null);
 	useEffect(() => {
@@ -118,7 +119,7 @@ export const useParkingData = () => {
 
 			const nested = nestData(d);
 			const usage = byUsage(d);
-			setData(d);
+			return setData(d);
 		});
 	}, []);
 

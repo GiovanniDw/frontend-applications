@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react';
-
+import useResizeAware from 'react-resize-aware';
 import { SVGContainer } from '../SVGContainer';
 
 import { useDimensions, useBbox } from '../../helpers/useResizeObservers';
@@ -32,13 +32,11 @@ export const DrawViz = (props) => {
 	const containerRef = useRef();
 	const dimensions = useDimensions(containerRef);
 
-	const sizeScale = useMemo(
-		() =>
-			scaleSqrt()
-				.domain([0, max(data, sizeValue)])
-				.range([0, maxRadius]),
-		[data, sizeValue, maxRadius]
-	);
+	const [resizeListener, sizes] = useResizeAware();
+	console.log(resizeListener);
+	const sizeScale = scaleSqrt()
+		.domain([0, max(data, sizeValue)])
+		.range([0, maxRadius]);
 
 	const LegendLabel = 'Soort Parkeermogelijkheid';
 
@@ -63,12 +61,13 @@ export const DrawViz = (props) => {
 	};
 
 	useEffect(() => {
-		if (!dimensions) return;
-	}, [dimensions]);
+		if (!sizes) return;
+	}, [sizes]);
 
 	return (
 		<div className='viz-wrapper' ref={containerRef}>
-			<SVGContainer className='map' size={dimensions}>
+			{resizeListener}
+			<SVGContainer className='map' size={sizes}>
 				<Map
 					nld={nld}
 					data={data}
@@ -81,7 +80,7 @@ export const DrawViz = (props) => {
 					fadeOpacity={fadeOpacity}
 					sizeScale={sizeScale}
 					sizeValue={sizeValue}
-					dimensions={dimensions}
+					dimensions={sizes}
 					setActiveProvince={setActiveProvince}
 				/>
 
@@ -97,7 +96,7 @@ export const DrawViz = (props) => {
 					tickTextOffset={-18}
 					fadeOpacity={0.2}
 					LegendLabel={LegendLabel}
-					dimensions={dimensions}
+					dimensions={sizes}
 					sizeScale={sizeScale}
 				/>
 
@@ -113,7 +112,7 @@ export const DrawViz = (props) => {
 					setActiveProvince={setActiveProvince}
 					activeProvince={activeProvince}
 					setHoveredUsage={setHoveredUsage}
-					dimensions={dimensions}
+					dimensions={sizes}
 					sizeScale={sizeScale}
 				/>
 			</SVGContainer>

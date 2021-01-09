@@ -25,38 +25,26 @@ export const Map = (props) => {
 	const { width, height } = dimensions;
 
 	const [currentCenter, setCurrentCenter] = useState(province);
-
-	const projection = geoMercator().translate([width / 2, height / 2]);
-
-	const path = geoPath().projection(projection);
 	const center = geoCentroid(currentCenter);
 	const bounds = geoBounds(currentCenter);
 	const distance = geoDistance(bounds[1], bounds[0]);
 	const scale = width / distance / Math.sqrt(2);
 
-	projection.scale(scale).center(center);
+	const projection = geoMercator().scale(scale).center(center);
 
-	return (
-		<>
-			<ZoomContainer
-				setActiveProvince={setActiveProvince}
-				activeProvince={activeProvince}
-				path={path}
-				size={dimensions}
-				width={width}
-				height={height}
-			>
+	const path = geoPath().projection(projection);
+
+	projection.translate([width / 2, height / 2]);
+
+	const renderNL = () => {};
+
+	const Provinces = ({ active }) => {
+		return (
+			<>
 				{useMemo(
 					() => (
 						<>
 							<g className='gemeentes'>
-								{/* {gemeente.features.map((d) => (
-								<path
-									key={d.id}
-									className='gemeente-grens'
-									d={path(d)}
-								/>
-							))} */}
 								<path
 									className='gemeente-borders'
 									d={path(gemeenteBorder)}
@@ -65,13 +53,17 @@ export const Map = (props) => {
 
 							<g className='provinces'>
 								{province.features.map((d) => (
-									<Province
-										data={d}
+									<path
 										key={d.id}
+										active={activeProvince ? d : undefined}
+										className={
+											active
+												? 'province active'
+												: 'province'
+										}
 										d={path(d)}
-										title={d.properties.statnaam}
-										active={activeProvince === d}
 										onClick={() => activateProvince(d)}
+										title={d.properties.statnaam}
 									/>
 								))}
 								<path
@@ -83,40 +75,25 @@ export const Map = (props) => {
 					),
 					[path, province, provinceBorder, gemeenteBorder]
 				)}
-				<Marks
-					filteredUsage={filteredUsage}
-					data={data}
-					projection={projection}
-					colorScale={colorScale}
-					colorValue={colorValue}
-					activeProvince={activeProvince}
-					hoveredUsage={hoveredUsage}
-					fadeOpacity={fadeOpacity}
-					sizeScale={sizeScale}
-					sizeValue={sizeValue}
-				/>
-				<Marks
-					filteredUsage={filteredUsage}
-					data={filteredUsage}
-					projection={projection}
-					colorScale={colorScale}
-					colorValue={colorValue}
-					sizeValue={sizeValue}
-					sizeScale={sizeScale}
-				/>
+			</>
+		);
+	};
+
+	return (
+		<>
+			<ZoomContainer
+				setActiveProvince={setActiveProvince}
+				activeProvince={activeProvince}
+				path={path}
+				size={dimensions}
+				width={width}
+				height={height}
+			>
+				<Provinces />
+
+				<Marks {...props} projection={projection} />
 			</ZoomContainer>
 		</>
-	);
-};
-
-const Province = ({ d, active, onClick }) => {
-	return (
-		<StyledProvincePath
-			className={active ? 'province active' : 'province'}
-			d={d}
-			onClick={onClick}
-			title={d.properties}
-		/>
 	);
 };
 

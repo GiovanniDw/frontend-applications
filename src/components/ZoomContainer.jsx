@@ -12,8 +12,8 @@ export const ZoomContainer = (props) => {
 	useEffect(() => {
 		if (!svgElement) return;
 		const svg = select(svgElement);
-		const width = svg.clientWidth;
-		const height = svg.clientHeight;
+		const width = svg.attr('width');
+		const height = svg.attr('height');
 
 		const zoomed = (event) => {
 			const { transform } = event;
@@ -36,6 +36,7 @@ export const ZoomContainer = (props) => {
 
 		if (activeProvince) {
 			const [[x0, y0], [x1, y1]] = path.bounds(currentProvince);
+
 			svg.selectAll('path');
 			svg.transition()
 				.duration(750)

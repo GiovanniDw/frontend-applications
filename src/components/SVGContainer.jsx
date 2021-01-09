@@ -12,9 +12,10 @@ export const SVGContainer = (props) => {
 	const { size, children, className } = props;
 	if (!size) return;
 	const { width, height } = size;
+
 	const svgRef = useRef(null);
 	const [svg, setSvg] = useState(null);
-	useEffect(() => setSvg(svgRef.current), []);
+	useEffect(() => setSvg(svgRef.current), [size]);
 	return (
 		<svg
 			className={className}

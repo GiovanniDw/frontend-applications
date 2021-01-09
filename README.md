@@ -9,6 +9,8 @@ Learn more about the [`tech-trach().and().this(course)`](https://github.com/cmda
 
 > [The Wiki⤴︎](https://github.com/GiovanniDw/frontend-applications/wiki) which documents my process during these courses.
 
+![image](https://github.com/GiovanniDw/frontend-applications/wiki/assets/visual.png)
+
 <h2> Contents</h2>
 
 - [Description](#description)

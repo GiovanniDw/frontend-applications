@@ -15,6 +15,7 @@ export const Container = styled.div`
 	height: 100%;
 
 	.map {
+		color: red;
 	}
 	.legend {
 		position: absolute;

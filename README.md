@@ -37,9 +37,11 @@ Create a client-side application in JavaScript which dynamically renders data to
 ## Features
 
 -   [x] Get external data from API.
--   [ ] Clean external API data.
--   [ ] Transform cleaned data.
--   [ ] Use D3 & React to Create Visualisation.
+-   [x] Clean external API data.
+-   [x] Transform cleaned data.
+-   [x] Use D3 & React to Create Visualisation.
+-   [x] Zoom to clicked Province
+-   [x] Transform data based on active province
 
 ## Installation
 
@@ -92,6 +94,7 @@ https://opendata.rdw.nl/resource/ixf8-gtwq.json
 ## Resources
 
 -   [CMDA Tech Track recource page](https://cmda-tt.github.io/course-20-21/resources/)
+-   [Cartomap / nl](https://github.com/cartomap/nl)
 
 ## Credits
 

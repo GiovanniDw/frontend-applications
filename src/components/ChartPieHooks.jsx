@@ -1,19 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { select, pie, arc, rollups, interpolate } from 'd3';
-import { animated, useSpring } from 'react-spring';
 import { useSvg } from './SVGContainer';
 
 import { useDimensions } from '../helpers/useResizeObservers';
-
-const animationDuration = 250;
-const animationConfig = {
-	to: async (next, cancel) => {
-		await next({ t: 1 });
-	},
-	from: { t: 0 },
-	config: { duration: animationDuration },
-	reset: true,
-};
 
 export const Chart = (props) => {
 	const { data, dimensions, colorScale, onHover } = props;
@@ -36,14 +25,14 @@ export const Chart = (props) => {
 		const drawChart = (dataByUsage) => {
 			const outerRadius = Math.min(width, height) / 10 - 1;
 
-			const createPie = pie()
+			const pieGenerator = pie()
 				.padAngle(0)
 				.value((d) => d[1])
 				.sort(null);
 			const arcGenerator = arc().innerRadius(20).outerRadius(outerRadius);
 
-			const pieData = createPie(dataByUsage);
-			const prevPieData = createPie(cache.current);
+			const pieData = pieGenerator(dataByUsage);
+			const prevPieData = pieGenerator(cache.current);
 
 			const selection = select(pieChartRef.current);
 			const selectionWithData = selection

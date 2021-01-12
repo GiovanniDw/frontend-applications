@@ -1,10 +1,16 @@
-import React, { useMemo, useState, useRef } from 'react';
-import { useSpring, useTransition, animated, useTrail } from 'react-spring';
+import React, { useMemo, useState, useRef, useEffect } from 'react';
+import {
+	useSpring,
+	useTransition,
+	animated,
+	useTrail,
+	useSprings,
+} from 'react-spring';
 import styled from 'styled-components';
 import { colors, px2vw } from '../../GlobalStyles';
 import { geoMercator, geoPath, geoCentroid, geoBounds, geoDistance } from 'd3';
 import { ZoomContainer } from '../ZoomContainer';
-
+import { useSvg } from '../SVGContainer';
 export const Map = (props) => {
 	const {
 		nld,
@@ -18,27 +24,29 @@ export const Map = (props) => {
 		setActiveProvince,
 		filteredUsage,
 		hoveredUsage,
+		filteredData,
 		fadeOpacity,
 		dimensions,
 	} = props;
 	const { gemeente, gemeenteBorder, province, provinceBorder } = nld;
 	const { width, height } = dimensions;
-
+	const svgElement = useSvg();
 	const [currentCenter, setCurrentCenter] = useState(province);
 	const center = geoCentroid(currentCenter);
 	const bounds = geoBounds(currentCenter);
 	const distance = geoDistance(bounds[1], bounds[0]);
-	const scale = width / distance / Math.sqrt(4);
+	const scale = height + width / distance / Math.sqrt(2);
 
-	const projection = geoMercator().scale(scale).center(center);
+	const projection = geoMercator()
+		.scale(scale)
+		.center(center)
+		.translate([width / 2, height / 2]);
 
 	const path = geoPath().projection(projection);
 
-	projection.translate([width / 2, height / 2]);
-
 	const renderNL = () => {};
 
-	const Provinces = ({ active }) => {
+	const Provinces = () => {
 		return (
 			<>
 				{useMemo(
@@ -55,9 +63,8 @@ export const Map = (props) => {
 								{province.features.map((d) => (
 									<path
 										key={d.id}
-										active={activeProvince ? d : undefined}
 										className={
-											active
+											activeProvince === d
 												? 'province active'
 												: 'province'
 										}
@@ -89,9 +96,8 @@ export const Map = (props) => {
 				width={width}
 				height={height}
 			>
-				<Provinces />
-
-				<Marks {...props} projection={projection} />
+				{data.length && Provinces()}
+				{data && <Marks {...props} projection={projection} />}
 			</ZoomContainer>
 		</>
 	);
@@ -105,62 +111,84 @@ const StyledProvincePath = styled.path`
 	}
 `;
 
-const Marks = ({
-	data,
-	projection,
-	colorScale,
-	colorValue,
-	filteredUsage,
-	activeProvince,
-	hoveredUsage,
-	fadeOpacity,
-	sizeScale,
-	sizeValue,
-}) => {
+const Marks = (props) => {
+	const {
+		data,
+		hoveredUsage,
+		projection,
+		sizeScale,
+		colorScale,
+		sizeValue,
+		colorValue,
+		fadeOpacity,
+		filteredData,
+	} = props;
 	const springRef = useRef();
+	// const style = useSpring({ opacity: 1, from: { opacity: 0 } });
+	const [visibleLocations, setVisibleLocations] = useState(data);
+
+	useEffect(() => {
+		if (!data) return;
+		setVisibleLocations(filteredData);
+	}, [data]);
 
 	return (
 		<g className='parking-locations'>
 			{data.map((d) => {
-				const [x, y] = projection([d.longitude, d.latitude]);
-
+				const proj = projection([d.longitude, d.latitude]);
+				const r = sizeScale(sizeValue(d));
+				const fill = colorScale(colorValue(d));
 				return (
-					<StyledCircle
+					<Circle
 						key={d.id}
-						cx={x}
-						cy={y}
-						r={sizeScale(sizeValue(d))}
-						fill={colorScale(colorValue(d))}
+						proj={proj}
+						// cx={x}
+						// cy={y}
+						r={r}
+						fill={fill}
 						value={d.usage}
-						// isShowing={filteredUsage.includes(d)}
-						opacity={
+						active={
 							hoveredUsage && d.usage !== hoveredUsage
-								? fadeOpacity
-								: 0.8
+								? true
+								: false
 						}
+
+						// opacity={
+						// 	hoveredUsage && d.usage !== hoveredUsage
+						// 		? fadeOpacity
+						// 		: 0.8
+						// }
 					>
 						<title> {d.name}</title>
-					</StyledCircle>
+					</Circle>
 				);
 			})}
 		</g>
 	);
 };
 
-// const Circle = (props) => {
-// 	const style = useSpring({
-// 		config: {
-// 			duration: 200,
-// 		},
-// 		opacity: props.isShowing ? 0 : 1,
-// 	});
-// 	return <StyledCircle style={style} {...props}></StyledCircle>;
-// };
+const Circle = (props) => {
+	const { value, r, fill, transform, active, proj, isShowing } = props;
+
+	// const wasActive = useRef(false);
+
+	// const style = useSprings({
+	// 	config: {
+	// 		duration: 300,
+	// 	},
+	// 	opacity: active ? 0.1 : 1,
+	// 	r: active ? 1 : r,
+	// });
+
+	return (
+		<animated.circle fill={fill} r={r} transform={`translate(${proj})`} />
+	);
+};
 
 const StyledCircle = styled(animated.circle)`
-	transition-duration: 300ms;
+	/* transition-duration: 500ms; */
 	/* fill: ${(props) => (props.active ? colors.blue : colors.blue)}; */
-	fill-opacity: 1;
+	/* fill-opacity: 1; */
 	/* stroke: ${(props) => (props.active ? colors.red : colors.blue)}; */
 	/* stroke-width: 0.5; */
 	/* stroke-width: ${(props) => (props.active ? 1 : 3)}; */

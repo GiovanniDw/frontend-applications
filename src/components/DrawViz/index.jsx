@@ -33,7 +33,7 @@ export const DrawViz = (props) => {
 	const dimensions = useDimensions(containerRef);
 
 	const [resizeListener, sizes] = useResizeAware();
-	console.log(resizeListener);
+
 	const sizeScale = scaleSqrt()
 		.domain([0, max(data, sizeValue)])
 		.range([0, maxRadius]);
@@ -41,13 +41,13 @@ export const DrawViz = (props) => {
 	const LegendLabel = 'Soort Parkeermogelijkheid';
 
 	const activateProvince = (d) => {
-		if (activeProvince === null || activeProvince !== d) {
+		if (activeProvince === null && activeProvince !== d) {
 			setActiveProvince(d);
-			setMaxradius(5);
+			// setMaxradius(5);
 			return;
 		} else if (activeProvince === d) {
 			setActiveProvince(null);
-			setMaxradius(10);
+			// setMaxradius(10);
 		}
 	};
 

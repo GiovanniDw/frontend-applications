@@ -1,5 +1,5 @@
 import { select, zoom, zoomIdentity, zoomTransform } from 'd3';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSvg } from './SVGContainer';
 
 export const ZoomContainer = (props) => {
@@ -8,26 +8,24 @@ export const ZoomContainer = (props) => {
 	const svgElement = useSvg();
 
 	const [{ x, y, k }, setTransform] = useState({ x: 0, y: 0, k: 1 });
-
+	const zoomed = (event) => {
+		const { transform } = event;
+		setTransform(transform);
+	};
+	const zoomMap = useRef(zoom().scaleExtent([1, 10]).on('zoom', zoomed));
 	useEffect(() => {
 		if (!svgElement) return;
+
 		const svg = select(svgElement);
-		const width = svg.attr('width');
-		const height = svg.attr('height');
-
-		const zoomed = (event) => {
-			const { transform } = event;
-			setTransform(transform);
-		};
-
-		const zoomMap = zoom().scaleExtent([1, 10]).on('zoom', zoomed);
+		const width = svgElement.clientWidth;
+		const height = svgElement.clientHeight;
 
 		const reset = () => {
 			setActiveProvince(null);
 			svg.transition()
 				.duration(750)
 				.call(
-					zoomMap.transform,
+					zoomMap.current.transform,
 					zoomIdentity,
 					zoomTransform(svg).invert([width / 2, height / 2])
 				);
@@ -41,7 +39,7 @@ export const ZoomContainer = (props) => {
 			svg.transition()
 				.duration(750)
 				.call(
-					zoomMap.transform,
+					zoomMap.current.transform,
 					zoomIdentity
 						.translate(width / 2, height / 2)
 						.scale(
@@ -60,7 +58,7 @@ export const ZoomContainer = (props) => {
 			reset();
 		}
 
-		svg.call(zoomMap);
+		svg.call(zoomMap.current);
 		return;
 	}, [svgElement, activeProvince]);
 

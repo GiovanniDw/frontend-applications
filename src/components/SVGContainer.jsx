@@ -5,12 +5,12 @@ import React, {
 	createContext,
 	useContext,
 } from 'react';
-
+import { useSpring, animated } from 'react-spring';
 const Context = createContext(null);
 
 export const SVGContainer = (props) => {
 	const { size, children, className } = props;
-	if (!size) return;
+
 	const { width, height } = size;
 
 	const svgRef = useRef(null);

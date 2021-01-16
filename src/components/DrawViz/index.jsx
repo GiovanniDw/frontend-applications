@@ -5,7 +5,7 @@ import { SVGContainer } from '../SVGContainer';
 import { useDimensions, useBbox } from '../../helpers/useResizeObservers';
 import Legend from '../Legend';
 import { Map } from './Map';
-import { max, scaleSqrt } from 'd3';
+import { max, scaleSqrt, scaleOrdinal } from 'd3';
 
 import Chart from '../Chart';
 
@@ -15,18 +15,18 @@ export const DrawViz = (props) => {
 		data,
 		filteredUsage,
 		filteredData,
-		colorScale,
 		colorValue,
 		sizeValue,
 		hoveredUsage,
 		fadeOpacity,
 		children,
-		activeProvince,
-		setActiveProvince,
+		activeProvinceFeature,
+		setActiveProvinceFeature,
 		setHoveredUsage,
+		colorRange,
 	} = props;
 	const { gemeente, gemeenteBorder, province, provinceBorder } = nld;
-	const { allData } = data;
+	// const { allData } = data;
 	const [activeCity, setActiveCity] = useState(null);
 	const [maxRadius, setMaxradius] = useState(10);
 	const containerRef = useRef();
@@ -34,19 +34,27 @@ export const DrawViz = (props) => {
 
 	const [resizeListener, sizes] = useResizeAware();
 
-	const sizeScale = scaleSqrt()
-		.domain([0, max(data, sizeValue)])
-		.range([0, maxRadius]);
+	const colorScale = useMemo(
+		() => scaleOrdinal().domain(data.map(colorValue)).range(colorRange),
+		[data, colorValue, colorRange]
+	);
 
-	const LegendLabel = 'Soort Parkeermogelijkheid';
+	const sizeScale = useMemo(
+		() =>
+			scaleSqrt()
+				.domain([0, max(data, sizeValue)])
+				.range([0, maxRadius]),
+		[data, sizeValue, maxRadius]
+	);
 
 	const activateProvince = (d) => {
-		if (activeProvince === null && activeProvince !== d) {
-			setActiveProvince(d);
+		const province = d.properties.statnaam;
+		if (activeProvinceFeature === null && activeProvinceFeature !== d) {
+			setActiveProvinceFeature(d);
 			// setMaxradius(5);
 			return;
-		} else if (activeProvince === d) {
-			setActiveProvince(null);
+		} else if (activeProvinceFeature === d) {
+			setActiveProvinceFeature(null);
 			// setMaxradius(10);
 		}
 	};
@@ -61,27 +69,29 @@ export const DrawViz = (props) => {
 	};
 
 	useEffect(() => {
+		console.log(dimensions);
 		if (!sizes) return;
 	}, [sizes]);
 
 	return (
 		<div className='viz-wrapper' ref={containerRef}>
 			{resizeListener}
-			<SVGContainer className='map' size={sizes}>
+			<SVGContainer className='map' size={dimensions}>
 				<Map
+					{...props}
 					nld={nld}
 					data={data}
 					colorScale={colorScale}
 					colorValue={colorValue}
-					activeProvince={activeProvince}
+					activeProvinceFeature={activeProvinceFeature}
 					activateProvince={activateProvince}
 					hoveredUsage={hoveredUsage}
 					filteredUsage={filteredUsage}
 					fadeOpacity={fadeOpacity}
 					sizeScale={sizeScale}
 					sizeValue={sizeValue}
-					dimensions={sizes}
-					setActiveProvince={setActiveProvince}
+					dimensions={dimensions}
+					setActiveProvinceFeature={setActiveProvinceFeature}
 				/>
 
 				<Legend
@@ -95,13 +105,12 @@ export const DrawViz = (props) => {
 					tickSize={8}
 					tickTextOffset={-18}
 					fadeOpacity={0.2}
-					LegendLabel={LegendLabel}
-					dimensions={sizes}
+					dimensions={dimensions}
 					sizeScale={sizeScale}
 				/>
 
 				<Chart
-					data={filteredData}
+					data={props.activeLocations}
 					onHover={setHoveredUsage}
 					hoveredUsage={hoveredUsage}
 					filteredUsage={filteredUsage}
@@ -109,10 +118,10 @@ export const DrawViz = (props) => {
 					colorValue={colorValue}
 					sizeValue={sizeValue}
 					fadeOpacity={0.2}
-					setActiveProvince={setActiveProvince}
-					activeProvince={activeProvince}
+					setActiveProvinceFeature={setActiveProvinceFeature}
+					activeProvinceFeature={activeProvinceFeature}
 					setHoveredUsage={setHoveredUsage}
-					dimensions={sizes}
+					dimensions={dimensions}
 					sizeScale={sizeScale}
 				/>
 			</SVGContainer>

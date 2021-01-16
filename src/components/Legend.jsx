@@ -2,6 +2,13 @@ import React, { useEffect, useRef } from 'react';
 import { select, format } from 'd3';
 import { StyledCircle } from './StyledComponents';
 export const Checkbox = (props) => <input type='checkbox' {...props} />;
+import {
+	useSpring,
+	useTransition,
+	animated,
+	useTrail,
+	useSprings,
+} from 'react-spring';
 import { useSvg } from './SVGContainer';
 export const Legend = ({
 	colorScale,
@@ -63,7 +70,7 @@ export const Legend = ({
 			<g transform={`translate(${width - 20}, ${100})`} textAnchor='end'>
 				<g className='color-legend'>
 					<text x={0} y={-25} className='legend-label'>
-						{LegendLabel}
+						Soort Parkeermogelijkheid
 					</text>
 					{colorScale.domain().map((domainValue, i) => (
 						<g
@@ -80,7 +87,7 @@ export const Legend = ({
 							<text x={tickTextOffset} dy='.32em'>
 								{domainValue}
 							</text>
-							<StyledCircle
+							<circle
 								fill={colorScale(domainValue)}
 								r={tickSize}
 								opacity={

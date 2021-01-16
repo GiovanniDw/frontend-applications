@@ -3,43 +3,48 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useSvg } from './SVGContainer';
 
 export const ZoomContainer = (props) => {
-	const { children, path, activeProvince, setActiveProvince } = props;
+	const {
+		children,
+		path,
+		activeProvinceFeature,
+		setActiveProvinceFeature,
+	} = props;
 
 	const svgElement = useSvg();
 
 	const [{ x, y, k }, setTransform] = useState({ x: 0, y: 0, k: 1 });
-	const zoomed = (event) => {
-		const { transform } = event;
-		setTransform(transform);
-	};
-	const zoomMap = useRef(zoom().scaleExtent([1, 10]).on('zoom', zoomed));
+
 	useEffect(() => {
 		if (!svgElement) return;
 
 		const svg = select(svgElement);
 		const width = svgElement.clientWidth;
 		const height = svgElement.clientHeight;
-
+		const zoomed = (event) => {
+			const { transform } = event;
+			setTransform(transform);
+		};
+		const zoomMap = zoom().scaleExtent([1, 10]).on('zoom', zoomed);
 		const reset = () => {
-			setActiveProvince(null);
+			setActiveProvinceFeature(null);
 			svg.transition()
 				.duration(750)
 				.call(
-					zoomMap.current.transform,
+					zoomMap.transform,
 					zoomIdentity,
 					zoomTransform(svg).invert([width / 2, height / 2])
 				);
 		};
-		const currentProvince = select(activeProvince).node();
+		const currentProvince = select(activeProvinceFeature).node();
 
-		if (activeProvince) {
+		if (activeProvinceFeature) {
 			const [[x0, y0], [x1, y1]] = path.bounds(currentProvince);
 
 			svg.selectAll('path');
 			svg.transition()
 				.duration(750)
 				.call(
-					zoomMap.current.transform,
+					zoomMap.transform,
 					zoomIdentity
 						.translate(width / 2, height / 2)
 						.scale(
@@ -57,10 +62,9 @@ export const ZoomContainer = (props) => {
 		} else {
 			reset();
 		}
-
-		svg.call(zoomMap.current);
+		svg.call(zoomMap);
 		return;
-	}, [svgElement, activeProvince]);
+	}, [svgElement, activeProvinceFeature]);
 
 	return (
 		<g transform={`translate(${x}, ${y}) scale(${k})`} strokeWidth={1 / k}>

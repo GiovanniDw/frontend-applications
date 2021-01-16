@@ -52,7 +52,6 @@ const row = (d) => {
 const cleanProvince = (d) => {
 	if (!d.province) return;
 	d.province = d.province.replace('Fryslân', 'Friesland');
-
 	return d;
 };
 
@@ -61,7 +60,6 @@ const cleanUsage = (d) => {
 		.replace('park and ride', 'P+R Parkeerplaats')
 		.replace('garage', 'Parkeergarage')
 		.replace('terrain', 'Parkeerterrein');
-
 	return;
 };
 
@@ -114,14 +112,16 @@ export const useParkingData = () => {
 			return d;
 		};
 		// csv(csvParking, cleanParkingData).then(setData);
-		dsv(';', parkeerData, autoType, cleanParkingData).then((d) => {
-			const allData = d;
+		dsv(';', parkeerData, autoType, cleanParkingData)
+			.then((d) => {
+				const allData = d;
 
-			const nested = nestData(d);
-			const usage = byUsage(d);
-			return setData(d);
-		});
-	}, []);
+				// const nested = nestData(d);
+				// const usage = byUsage(d);
+				return d;
+			})
+			.then(setData);
+	}, [!data]);
 
 	return data;
 };

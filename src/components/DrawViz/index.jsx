@@ -13,17 +13,14 @@ export const DrawViz = (props) => {
 	const {
 		nld,
 		data,
-		filteredUsage,
 		filteredData,
-		colorValue,
-		sizeValue,
 		hoveredUsage,
 		fadeOpacity,
 		children,
-		activeProvinceFeature,
-		setActiveProvinceFeature,
 		setHoveredUsage,
 		colorRange,
+		allLocations,
+		dispatch,
 	} = props;
 	const { gemeente, gemeenteBorder, province, provinceBorder } = nld;
 	// const { allData } = data;
@@ -31,20 +28,24 @@ export const DrawViz = (props) => {
 	const [maxRadius, setMaxradius] = useState(10);
 	const containerRef = useRef();
 	const dimensions = useDimensions(containerRef);
-
+	const [activeProvinceFeature, setActiveProvinceFeature] = useState(null);
 	const [resizeListener, sizes] = useResizeAware();
-
+	const sizeValue = (d) => d.capacity;
+	const colorValue = (d) => d.usage;
 	const colorScale = useMemo(
-		() => scaleOrdinal().domain(data.map(colorValue)).range(colorRange),
-		[data, colorValue, colorRange]
+		() =>
+			scaleOrdinal()
+				.domain(allLocations.map(colorValue))
+				.range(colorRange),
+		[allLocations, colorValue, colorRange]
 	);
 
 	const sizeScale = useMemo(
 		() =>
 			scaleSqrt()
-				.domain([0, max(data, sizeValue)])
+				.domain([0, max(allLocations, sizeValue)])
 				.range([0, maxRadius]),
-		[data, sizeValue, maxRadius]
+		[allLocations, sizeValue, maxRadius]
 	);
 
 	const activateProvince = (d) => {
@@ -52,10 +53,16 @@ export const DrawViz = (props) => {
 		if (activeProvinceFeature === null && activeProvinceFeature !== d) {
 			setActiveProvinceFeature(d);
 			// setMaxradius(5);
+			props.dispatch({
+				type: 'FILTER_ACTIVE_PROVINCE',
+				payload: { province },
+			});
+
 			return;
 		} else if (activeProvinceFeature === d) {
 			setActiveProvinceFeature(null);
 			// setMaxradius(10);
+			props.dispatch({ type: 'RESET' });
 		}
 	};
 
@@ -69,7 +76,6 @@ export const DrawViz = (props) => {
 	};
 
 	useEffect(() => {
-		console.log(dimensions);
 		if (!sizes) return;
 	}, [sizes]);
 
@@ -80,14 +86,12 @@ export const DrawViz = (props) => {
 				<Map
 					{...props}
 					nld={nld}
-					data={data}
 					colorScale={colorScale}
 					colorValue={colorValue}
 					activeProvinceFeature={activeProvinceFeature}
 					activateProvince={activateProvince}
 					hoveredUsage={hoveredUsage}
-					filteredUsage={filteredUsage}
-					fadeOpacity={fadeOpacity}
+					fadeOpacity={0.2}
 					sizeScale={sizeScale}
 					sizeValue={sizeValue}
 					dimensions={dimensions}
@@ -95,8 +99,8 @@ export const DrawViz = (props) => {
 				/>
 
 				<Legend
+					{...props}
 					className='legend'
-					data={data}
 					onHover={setHoveredUsage}
 					hoveredUsage={hoveredUsage}
 					colorScale={colorScale}
@@ -110,10 +114,10 @@ export const DrawViz = (props) => {
 				/>
 
 				<Chart
+					{...props}
 					data={props.activeLocations}
 					onHover={setHoveredUsage}
 					hoveredUsage={hoveredUsage}
-					filteredUsage={filteredUsage}
 					colorScale={colorScale}
 					colorValue={colorValue}
 					sizeValue={sizeValue}

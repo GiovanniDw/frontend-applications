@@ -6,7 +6,9 @@ import {
 	useTrail,
 	useSprings,
 	interpolate,
+	Spring,
 } from 'react-spring';
+import { Transition } from 'react-spring/renderprops';
 import styled from 'styled-components';
 import { colors, px2vw } from '../../GlobalStyles';
 import { geoMercator, geoPath, geoCentroid, geoBounds, geoDistance } from 'd3';
@@ -15,18 +17,9 @@ import { useSvg } from '../SVGContainer';
 export const Map = (props) => {
 	const {
 		nld,
-		data,
-		colorScale,
-		colorValue,
-		sizeScale,
-		sizeValue,
 		activeProvinceFeature,
 		activateProvince,
 		setActiveProvinceFeature,
-		filteredUsage,
-		hoveredUsage,
-		filteredData,
-		fadeOpacity,
 		dimensions,
 	} = props;
 	const { gemeente, gemeenteBorder, province, provinceBorder } = nld;
@@ -90,6 +83,7 @@ export const Map = (props) => {
 	return (
 		<>
 			<ZoomContainer
+				{...nld}
 				setActiveProvinceFeature={setActiveProvinceFeature}
 				activeProvinceFeature={activeProvinceFeature}
 				path={path}
@@ -97,7 +91,7 @@ export const Map = (props) => {
 				width={width}
 				height={height}
 			>
-				{data && <Provinces />}
+				{props.nld && <Provinces />}
 				<Marks {...props} projection={projection} />
 			</ZoomContainer>
 		</>
@@ -114,16 +108,11 @@ const StyledProvincePath = styled.path`
 
 const Marks = (props) => {
 	const {
-		data,
-		hoveredUsage,
 		projection,
 		sizeScale,
 		colorScale,
 		sizeValue,
 		colorValue,
-		fadeOpacity,
-		filteredData,
-		filteredUsage,
 		allLocations,
 		activeLocations,
 	} = props;
@@ -150,14 +139,15 @@ const Marks = (props) => {
 
 				return (
 					<Circle
+						{...d}
 						key={d.id}
 						proj={proj}
 						// cx={x}
 						// cy={y}
-						r={r}
-						fill={fill}
+						r={d.capacitySizeScale}
+						fill={d.color}
 						value={d.usage}
-						active={activeLocations}
+						active={activeLocations && activeLocations.includes(d)}
 						// active={
 						// 	hoveredUsage && d.usage !== hoveredUsage
 						// 		? true
@@ -193,25 +183,26 @@ const Circle = (props) => {
 
 	const style = useSpring({
 		config: {
-			duration: 300,
+			duration: 100,
 		},
 		opacity: active ? 1 : 0.1,
-		r: active ? r : 1,
+		r: active ? r : r / 2,
 	});
 
 	const newStyle = useSpring({
+		opacity: active ? 1 : 0.1,
 		to: [
 			{ opacity: 1, color: '#ffaaee', r: r },
-			{ opacity: 0, color: 'rgb(14,26,19)', r: r },
+			{ opacity: 0, color: 'rgb(14,26,19)', r: 1 },
 		],
-		from: { opacity: 0, color: 'red', r: 0 },
+		from: { opacity: 0, color: 'red', r: r },
 	});
 
 	return (
 		<StyledCircle
 			fill={fill}
-			r={r}
-			// opacity={opacity}
+			r={props.active && props.active ? r : r / 2}
+			opacity={props.active && props.active ? 1 : 0.3}
 			transform={`translate(${proj})`}
 		/>
 	);

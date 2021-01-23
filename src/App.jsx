@@ -34,16 +34,20 @@ import parkingReducer from './reducers/parkingReducer';
 const initialState = {
 	allLocations: [],
 	activeLocations: [],
-	activeUsage: null,
+	nestedActiveLocations: [],
+	activeUsage: 'all',
 	activeCity: [],
 	activeProvince: 'all',
+	provinces: [],
+	sizeScale: [],
+	colorRange: [colors.darkBlue, colors.darkGray, colors.yellow],
 	reset: false,
 };
 
 export const App = () => {
 	const [olddata, setData] = useState();
 	const [hoveredUsage, setHoveredUsage] = useState(null);
-	const [activeProvinceFeature, setActiveProvinceFeature] = useState(null);
+
 	const [parkingData, dispatch] = useReducer(parkingReducer, initialState);
 	const [{ data, isLoading }] = useDataApi(
 		'https://gist.githubusercontent.com/GiovanniDw/9ebe42d142f40e58e333e546a82f9b0d/raw/5f69fabb70e85ae64cf19633aadd38fcf26a75a4/parkeerData.csv',
@@ -58,25 +62,14 @@ export const App = () => {
 
 	// const [container, setContainer] = useState(null);
 
-	const colorValue = (d) => d.usage;
-	const provinceValue = (d) => d.province;
-
-	const colorRange = [colors.darkBlue, colors.darkGray, colors.yellow];
-
-	const sizeValue = (d) => d.capacity;
-
-	const sizeRange = [];
-
 	useEffect(() => {
 		if (data.length) {
 			dispatch({
 				type: 'INITIAL_API_CALL',
 				payload: { data: formatData(data) },
 			});
-
-			console.log(parkingData);
 		}
-		console.log(isLoading);
+		// console.log(isLoading);
 	}, [data]);
 
 	// useEffect(() => {
@@ -85,7 +78,7 @@ export const App = () => {
 	// 	return;
 	// }, [getData]);
 
-	if (!nld || !data) {
+	if (!nld || !parkingData) {
 		return (
 			<div className='App'>
 				<Loading />
@@ -93,22 +86,17 @@ export const App = () => {
 		);
 	}
 
-	const filteredUsage = data.filter((d) => {
-		console.log(colorValue(d));
-		return hoveredUsage === colorValue(d);
-	});
-
 	// const filteredUsage = hoveredUsage
 	// 	? olddata.filter((d) => colorValue(d))
 	// 	: olddata;
 
-	const filteredData = activeProvinceFeature
-		? data.filter(
-				(d) =>
-					activeProvinceFeature.properties.statnaam ===
-					provinceValue(d)
-		  )
-		: data;
+	// const filteredData = activeProvinceFeature
+	// 	? data.filter(
+	// 			(d) =>
+	// 				activeProvinceFeature.properties.statnaam ===
+	// 				provinceValue(d)
+	// 	  )
+	// 	: data;
 
 	// const filterData = () => {
 	// 	try {
@@ -127,34 +115,19 @@ export const App = () => {
 					{isLoading ? (
 						<Loading />
 					) : (
-						<DrawViz
-							nld={nld}
-							data={data}
-							{...parkingData}
-							dispatch={dispatch}
-							hoveredUsage={hoveredUsage}
-							filteredUsage={filteredUsage}
-							filteredData={filteredData}
-							colorRange={colorRange}
-							colorValue={colorValue}
-							sizeValue={sizeValue}
-							fadeOpacity={0.2}
-							setActiveProvinceFeature={setActiveProvinceFeature}
-							activeProvinceFeature={activeProvinceFeature}
-							setHoveredUsage={setHoveredUsage}
-						>
+						<DrawViz nld={nld} {...parkingData} dispatch={dispatch}>
 							<h1 className='title'>
 								Parkeer plaatsen van Nederland{' '}
-								<span
+								{/* <span
 									className='current-province'
 									onClick={() =>
 										setActiveProvinceFeature(null)
 									}
 								>
-									{activeProvinceFeature
-										? `in ${activeProvinceFeature.properties.statnaam}`
+									{parkingData.activeProvince
+										? `in ${parkingData.activeProvince}`
 										: ''}
-								</span>
+								</span> */}
 							</h1>
 						</DrawViz>
 					)}

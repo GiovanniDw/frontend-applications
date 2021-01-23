@@ -16,7 +16,13 @@ const animationConfig = {
 };
 
 export const Chart = (props) => {
-	const { data, dimensions, colorScale, onHover } = props;
+	const {
+		data,
+		dimensions,
+		colorScale,
+		onHover,
+		nestedActiveLocations,
+	} = props;
 	const { width, height } = dimensions;
 
 	const svgElement = useSvg();
@@ -28,12 +34,12 @@ export const Chart = (props) => {
 	useEffect(() => {
 		if (!data || !dimensions || !pieChartRef || !pieSize) return;
 
-		const dataByUsage = rollups(
-			data,
-			(v) => v.length,
-			(d) => d.usage
-		);
-		cache.current = dataByUsage;
+		// const dataByUsage = rollups(
+		// 	data,
+		// 	(v) => v.length,
+		// 	(d) => d.usage
+		// );
+		// cache.current = dataByUsage;
 
 		const drawChart = (dataByUsage) => {
 			const outerRadius = Math.min(width, height) / 10 - 1;
@@ -76,9 +82,10 @@ export const Chart = (props) => {
 				.style('stroke', '#ffffff')
 				.style('stroke-width', 2);
 		};
-		return drawChart(dataByUsage);
-		// cache.current = dataByUsage;
-	}, [svgElement, data, pieChartRef, dimensions]);
+
+		cache.current = nestedActiveLocations;
+		return drawChart(nestedActiveLocations);
+	}, [svgElement, nestedActiveLocations, pieChartRef, dimensions]);
 
 	return (
 		<>

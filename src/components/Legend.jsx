@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { select, format } from 'd3';
 import { StyledCircle } from './StyledComponents';
 export const Checkbox = (props) => <input type='checkbox' {...props} />;
@@ -16,19 +16,19 @@ export const Legend = ({
 	tickSize = 8,
 	tickTextOffset = -25,
 	onHover,
-	hoveredUsage,
 	fadeOpacity,
 	LegendLabel,
 	className,
 	dimensions,
 	sizeScale,
+	dispatch,
 }) => {
 	const { width, height } = dimensions;
 	const svgElement = useSvg();
 	const sizeLegendRef = useRef();
-
+	const [hoveredUsage, setHoveredUsage] = useState(null);
 	useEffect(() => {
-		if (!svgElement) return;
+		if (!svgElement || !sizeScale) return;
 
 		const svg = select(svgElement);
 		let circleX = 0;
@@ -63,7 +63,7 @@ export const Legend = ({
 			.attr('dy', '1.3em')
 			.text(format('.0f'))
 			.attr('class', 'legend-text');
-	}, [svgElement, sizeLegendRef]);
+	}, [svgElement, sizeLegendRef, sizeScale]);
 
 	return (
 		<>
@@ -78,10 +78,17 @@ export const Legend = ({
 							className='tick'
 							transform={`translate(0,${i * tickSpacing})`}
 							onMouseEnter={() => {
-								onHover(domainValue);
+								const usage = domainValue;
+								setHoveredUsage(domainValue);
+
+								dispatch({
+									type: 'FILTER_PARKING_USAGE',
+									payload: { usage },
+								});
 							}}
 							onMouseOut={() => {
-								onHover(null);
+								setHoveredUsage(null);
+								dispatch({ type: 'RESET' });
 							}}
 						>
 							<text x={tickTextOffset} dy='.32em'>
@@ -99,7 +106,9 @@ export const Legend = ({
 						</g>
 					))}
 				</g>
-				<g ref={sizeLegendRef} className='size-legend'></g>
+				{sizeScale && (
+					<g ref={sizeLegendRef} className='size-legend'></g>
+				)}
 			</g>
 		</>
 	);

@@ -27,12 +27,12 @@ export const Chart = (props) => {
 
 	const svgElement = useSvg();
 
-	const pieChartRef = useRef();
+	const pieChartRef = useRef(null);
 
 	const pieSize = useDimensions(pieChartRef);
-	const cache = useRef();
+	const cache = useRef(nestedActiveLocations);
 	useEffect(() => {
-		if (!data || !dimensions || !pieChartRef || !pieSize) return;
+		if (!dimensions || !pieChartRef || !pieSize) return;
 
 		// const dataByUsage = rollups(
 		// 	data,
@@ -82,10 +82,10 @@ export const Chart = (props) => {
 				.style('stroke', '#ffffff')
 				.style('stroke-width', 2);
 		};
-
+		drawChart(nestedActiveLocations);
 		cache.current = nestedActiveLocations;
-		return drawChart(nestedActiveLocations);
-	}, [svgElement, nestedActiveLocations, pieChartRef, dimensions]);
+		return;
+	}, [svgElement, nestedActiveLocations, dimensions]);
 
 	return (
 		<>
@@ -94,6 +94,7 @@ export const Chart = (props) => {
 					height - 10 - pieSize.width / 2
 				})`}
 			>
+				<text>Hi</text>
 				<g ref={pieChartRef} className='arc'></g>
 			</g>
 		</>

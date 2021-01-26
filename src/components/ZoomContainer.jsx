@@ -20,13 +20,14 @@ export const ZoomContainer = (props) => {
 		const svg = select(svgElement);
 		const width = svgElement.clientWidth;
 		const height = svgElement.clientHeight;
+
 		const zoomed = (event) => {
 			const { transform } = event;
 			setTransform(transform);
 		};
 		const zoomMap = zoom().scaleExtent([1, 10]).on('zoom', zoomed);
 		const reset = () => {
-			setActiveProvinceFeature(null);
+			// setActiveProvinceFeature(null);
 			svg.transition()
 				.duration(750)
 				.call(
@@ -40,7 +41,6 @@ export const ZoomContainer = (props) => {
 		if (activeProvinceFeature) {
 			const [[x0, y0], [x1, y1]] = path.bounds(currentProvince);
 
-			svg.selectAll('path');
 			svg.transition()
 				.duration(750)
 				.call(
@@ -63,7 +63,9 @@ export const ZoomContainer = (props) => {
 			reset();
 		}
 		svg.call(zoomMap);
-		return;
+		return () => {
+			svg.call(zoomMap);
+		};
 	}, [svgElement, activeProvinceFeature]);
 
 	return (

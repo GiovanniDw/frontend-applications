@@ -7,7 +7,7 @@ import { GlobalStyle, colors, px2vw } from './GlobalStyles.jsx';
 import { useNLD } from './data/useNLD';
 import { useParkingData } from './data/useParkingData';
 import { useWrld } from './data/useWorld';
-import useDataApi from './hooks/useDataApi';
+import { useDataApiD3 } from './hooks/useDataApi';
 import useWindowSize from './helpers/useWindowSize';
 import {
 	useResizeObserver,
@@ -35,21 +35,21 @@ const initialState = {
 	allLocations: [],
 	activeLocations: [],
 	nestedActiveLocations: [],
-	activeUsage: 'all',
+	activeUsage: null,
 	activeCity: [],
-	activeProvince: 'all',
+	activeProvince: null,
 	provinces: [],
 	sizeScale: [],
+	sizeLegendValues: [],
 	colorRange: [colors.darkBlue, colors.darkGray, colors.yellow],
 	reset: false,
 };
 
 export const App = () => {
 	const [olddata, setData] = useState();
-	const [hoveredUsage, setHoveredUsage] = useState(null);
 
 	const [parkingData, dispatch] = useReducer(parkingReducer, initialState);
-	const [{ data, isLoading }] = useDataApi(
+	const [{ data, isLoading }] = useDataApiD3(
 		'https://gist.githubusercontent.com/GiovanniDw/9ebe42d142f40e58e333e546a82f9b0d/raw/5f69fabb70e85ae64cf19633aadd38fcf26a75a4/parkeerData.csv',
 		[]
 	);
@@ -60,8 +60,6 @@ export const App = () => {
 	// const getData = useParkingData();
 	const wrld = useWrld();
 
-	// const [container, setContainer] = useState(null);
-
 	useEffect(() => {
 		if (data.length) {
 			dispatch({
@@ -69,14 +67,7 @@ export const App = () => {
 				payload: { data: formatData(data) },
 			});
 		}
-		// console.log(isLoading);
 	}, [data]);
-
-	// useEffect(() => {
-	// 	if (!getData) return;
-	// 	setData(getData);
-	// 	return;
-	// }, [getData]);
 
 	if (!nld || !parkingData) {
 		return (
@@ -85,28 +76,6 @@ export const App = () => {
 			</div>
 		);
 	}
-
-	// const filteredUsage = hoveredUsage
-	// 	? olddata.filter((d) => colorValue(d))
-	// 	: olddata;
-
-	// const filteredData = activeProvinceFeature
-	// 	? data.filter(
-	// 			(d) =>
-	// 				activeProvinceFeature.properties.statnaam ===
-	// 				provinceValue(d)
-	// 	  )
-	// 	: data;
-
-	// const filterData = () => {
-	// 	try {
-	// 		return data.filter(
-	// 			(d) => activeProvince.properties.statnaam === provinceValue(d)
-	// 		);
-	// 	} catch (error) {
-	// 		return data;
-	// 	}
-	// };
 
 	return (
 		<>

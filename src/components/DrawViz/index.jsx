@@ -3,9 +3,10 @@ import useResizeAware from 'react-resize-aware';
 import { SVGContainer } from '../SVGContainer';
 
 import { useDimensions, useBbox } from '../../helpers/useResizeObservers';
+import useMeasure from '../../hooks/useMeasure';
 import Legend from '../Legend';
 import { Map } from './Map';
-import { max, scaleSqrt, scaleOrdinal } from 'd3';
+import { max, scaleSqrt, scaleOrdinal, scaleLinear } from 'd3';
 
 import Chart from '../Chart';
 
@@ -29,16 +30,13 @@ export const DrawViz = (props) => {
 	const containerRef = useRef();
 	const dimensions = useDimensions(containerRef);
 	const [activeProvinceFeature, setActiveProvinceFeature] = useState(null);
-	const [resizeListener, sizes] = useResizeAware();
+
 	const sizeValue = (d) => d.capacity;
 	const colorValue = (d) => d.usage;
-	const colorScale = useMemo(
-		() =>
-			scaleOrdinal()
-				.domain(allLocations.map(colorValue))
-				.range(colorRange),
-		[allLocations, colorValue, colorRange]
-	);
+
+	const colorScale = scaleOrdinal()
+		.domain(allLocations.map(colorValue))
+		.range(colorRange);
 
 	const sizeScale = useMemo(
 		() =>
@@ -50,15 +48,13 @@ export const DrawViz = (props) => {
 
 	const activateProvince = (d) => {
 		const province = d.properties.statnaam;
-		if (activeProvinceFeature === null && activeProvinceFeature !== d) {
+		if (activeProvinceFeature === null || activeProvinceFeature !== d) {
 			setActiveProvinceFeature(d);
 			// setMaxradius(5);
 			props.dispatch({
 				type: 'FILTER_ACTIVE_PROVINCE',
 				payload: { province },
 			});
-
-			return;
 		} else if (activeProvinceFeature === d) {
 			setActiveProvinceFeature(null);
 			// setMaxradius(10);
@@ -76,12 +72,11 @@ export const DrawViz = (props) => {
 	};
 
 	useEffect(() => {
-		if (!sizes) return;
-	}, [sizes]);
+		if (!dimensions) return;
+	}, [dimensions]);
 
 	return (
 		<div className='viz-wrapper' ref={containerRef}>
-			{resizeListener}
 			<SVGContainer className='map' size={dimensions}>
 				<Map
 					{...props}
@@ -90,34 +85,29 @@ export const DrawViz = (props) => {
 					colorValue={colorValue}
 					activeProvinceFeature={activeProvinceFeature}
 					activateProvince={activateProvince}
-					hoveredUsage={hoveredUsage}
 					fadeOpacity={0.2}
 					sizeScale={sizeScale}
 					sizeValue={sizeValue}
 					dimensions={dimensions}
 					setActiveProvinceFeature={setActiveProvinceFeature}
 				/>
-
-				<Legend
-					{...props}
-					className='legend'
-					onHover={setHoveredUsage}
-					hoveredUsage={hoveredUsage}
-					colorScale={colorScale}
-					colorValue={colorValue}
-					tickSpacing={22}
-					tickSize={8}
-					tickTextOffset={-18}
-					fadeOpacity={0.2}
-					dimensions={dimensions}
-					sizeScale={sizeScale}
-				/>
+				{sizeScale && (
+					<Legend
+						{...props}
+						className='legend'
+						colorScale={colorScale}
+						colorValue={colorValue}
+						tickSpacing={22}
+						tickSize={8}
+						tickTextOffset={-18}
+						fadeOpacity={0.2}
+						dimensions={dimensions}
+						sizeScale={sizeScale}
+					/>
+				)}
 
 				<Chart
 					{...props}
-					data={props.activeLocations}
-					onHover={setHoveredUsage}
-					hoveredUsage={hoveredUsage}
 					colorScale={colorScale}
 					colorValue={colorValue}
 					sizeValue={sizeValue}

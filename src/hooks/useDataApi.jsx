@@ -19,11 +19,18 @@ const cleanProvince = (d) => {
 };
 
 const cleanUsage = (d) => {
-	d.usage = d.usage
-		.replace('park and ride', 'P+R Parkeerplaats')
-		.replace('garage', 'Parkeergarage')
-		.replace('terrain', 'Parkeerterrein');
-	return;
+	try {
+		d.usage = d.usage
+			.replace('park and ride', 'P+R Parkeerplaats')
+			.replace('garage', 'Parkeergarage')
+			.replace('terrain', 'Parkeerterrein');
+
+		return d;
+	} catch (error) {
+		console.log(error);
+	}
+
+	return d;
 };
 // const cleanParkingData = (d) => {
 // 	cleanProvince(d);
@@ -38,7 +45,7 @@ const cleanUsage = (d) => {
 // 	return d;
 // };
 
-const useDataApi = (initialUrl, initialData) => {
+export const useDataApiD3 = (initialUrl, initialData) => {
 	const [data, setData] = useState(initialData);
 	const [url, setUrl] = useState(initialUrl);
 	const [isLoading, setIsLoading] = useState(false);
@@ -58,13 +65,14 @@ const useDataApi = (initialUrl, initialData) => {
 		};
 		const makeAPICall = () => {
 			const ls = localStorage.getItem(initialUrl);
-			if (!ls) {
+			if (ls) {
 				dsv(';', ls, autoType, cleanParkingData).then(setData);
+				console.log(data);
 			} else {
 				setIsLoading(true);
 				try {
 					dsv(';', url, autoType, cleanParkingData).then(setData);
-
+					console.log(data);
 					localStorage.setItem(initialUrl, url);
 				} catch (err) {
 					console.log('err', err);
@@ -78,4 +86,4 @@ const useDataApi = (initialUrl, initialData) => {
 	return [{ data, isLoading }, setUrl];
 };
 
-export default useDataApi;
+export default useDataApiD3;

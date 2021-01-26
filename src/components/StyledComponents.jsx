@@ -28,7 +28,7 @@ export const Container = styled.div`
 export const StyledCircle = styled.circle`
 	/* transition-duration: 100ms; */
 	/* fill: ${(props) => (props.active ? colors.blue : colors.blue)}; */
-	fill-opacity: 1;
+	/* fill-opacity: 1; */
 	/* stroke: ${(props) => (props.active ? props.fill : colors.blue)}; */
 	stroke-width: 1;
 	/* stroke-width: ${(props) => (props.active ? 1 : 3)}; */

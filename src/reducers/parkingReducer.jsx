@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 import { filter } from 'lodash';
 import React from 'react';
-import { max, scaleSqrt, scaleOrdinal } from 'd3';
+import { max, scaleSqrt, scaleOrdinal, ascending } from 'd3';
 import {
 	filterParkingByUsage,
 	filterParkingByProvince,
@@ -17,16 +17,19 @@ const parkingReducer = (state, action) => {
 	let activeCity;
 	let province;
 	let usage;
+	let sortedLocations;
 
 	switch (action.type) {
 		case 'INITIAL_API_CALL':
 			// activeLocations = action.payload.data.filter((d) => filterParkingByUsage)
-
+			sortedLocations = action.payload.data.sort((a, b) =>
+				ascending(a.usage, b.usage)
+			);
 			return {
 				...state,
 				allLocations: action.payload.data,
 				activeLocations: action.payload.data,
-				nestedActiveLocations: nestedData(action.payload.data),
+				nestedActiveLocations: nestedData(sortedLocations),
 			};
 		case 'FILTER_PARKING_USAGE':
 			usage = action.payload.usage;
@@ -34,7 +37,7 @@ const parkingReducer = (state, action) => {
 				filterParkingByUsage(d, usage)
 			);
 
-			if (state.activeProvince !== 'all') {
+			if (state.activeProvince !== null) {
 				activeLocations = activeLocations.filter((d) =>
 					filterParkingByProvince(d, state.activeProvince)
 				);
@@ -55,9 +58,13 @@ const parkingReducer = (state, action) => {
 				// 	province = null;
 			} else {
 				activeLocations = state.allLocations.filter((d) =>
-					filterParkingByProvince(d, state.activeUsage)
+					filterParkingByProvince(d, province)
 				);
 			}
+			sortedLocations = activeLocations.sort((a, b) =>
+				ascending(a.usage, b.usage)
+			);
+
 			nestedActiveLocations = nestedData(activeLocations);
 			return {
 				...state,
@@ -70,8 +77,8 @@ const parkingReducer = (state, action) => {
 				...state,
 				activeLocations: state.allLocations,
 				nestedActiveLocations: nestedData(state.allLocations),
-				activeProvince: 'all',
-				activeUsage: 'all',
+				activeProvince: null,
+				activeUsage: null,
 				reset: false,
 			};
 

@@ -3,6 +3,7 @@ import {
 	pie,
 	arc,
 	rollups,
+	rollup,
 	interpolate,
 	scaleOrdinal,
 	scaleSqrt,
@@ -31,7 +32,7 @@ const maxRadius = 10;
 
 export const formatData = (data) => {
 	const maxSizeVal = max(data, sizeValue);
-	console.log(maxSizeVal);
+
 	const colorScale = scaleOrdinal()
 		.domain(data.map(colorValue))
 		.range(colorRange);

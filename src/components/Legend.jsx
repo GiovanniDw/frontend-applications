@@ -35,23 +35,26 @@ export const Legend = ({
 
 		const svg = select(svgElement);
 		let circleX = 0;
-
+		const selection = select(sizeLegendRef.current);
 		const drawSizeLegend = () => {
-			const selection = select(sizeLegendRef.current);
 			selection
+				.selectAll('text')
+				.enter()
 				.append('text')
 				.text('Capaciteit Parkeergarage')
 				.attr('transform', `translate(${circleX},80)`)
-				.attr('class', 'legend-label')
-				.enter();
+				.attr('class', 'legend-label');
+
+			selection.selectAll('text').enter().exit().remove();
 
 			const sizelegendG = selection
-				.append('g')
-				.attr('fill', '#444')
-				.attr('transform', `translate(${circleX},140)`)
-				.attr('text-anchor', 'end')
 				.selectAll('g')
 				.data(sizeValues)
+				.enter()
+				.append('g')
+				.attr('fill', '#444')
+				.attr('transform', `translate(${circleX},130)`)
+				.attr('text-anchor', 'end')
 				.join('g');
 
 			sizelegendG
@@ -67,6 +70,8 @@ export const Legend = ({
 				.attr('dy', '1.3em')
 				.text(format('.0f'))
 				.attr('class', 'legend-text');
+
+			sizelegendG.selectAll('g').exit().remove();
 		};
 
 		return drawSizeLegend();
@@ -104,7 +109,9 @@ export const Legend = ({
 							<circle
 								fill={colorScale(domainValue)}
 								r={tickSize}
-								opacity={
+								stroke={colorScale(domainValue)}
+								strokeWidth='3'
+								fillOpacity={
 									activeUsage && domainValue !== activeUsage
 										? fadeOpacity
 										: 1
@@ -114,7 +121,14 @@ export const Legend = ({
 					))}
 				</g>
 				{sizeScale && (
-					<g ref={sizeLegendRef} className='size-legend'></g>
+					<g ref={sizeLegendRef} className='size-legend'>
+						<text
+							className='legend-label'
+							transform='translate(0, 80)'
+						>
+							Capaciteit Parkeergarage
+						</text>
+					</g>
 				)}
 			</g>
 		</>

@@ -8,99 +8,10 @@ import {
 	interpolate,
 	Spring,
 } from 'react-spring';
+import { Controls, PlayState, Tween } from 'react-gsap';
 import { Transition } from 'react-spring/renderprops';
 import styled from 'styled-components';
 import { colors, px2vw } from '../../GlobalStyles';
-import { geoMercator, geoPath, geoCentroid, geoBounds, geoDistance } from 'd3';
-import { ZoomContainer } from '../ZoomContainer';
-import { useSvg } from '../SVGContainer';
-export const Map = (props) => {
-	const {
-		nld,
-		activeProvinceFeature,
-		activateProvince,
-		setActiveProvinceFeature,
-		dimensions,
-	} = props;
-	const { gemeente, gemeenteBorder, province, provinceBorder } = nld;
-	const { width, height } = dimensions;
-	const svgElement = useSvg();
-	const pathRef = useRef();
-	const [currentCenter, setCurrentCenter] = useState(province);
-	const center = geoCentroid(currentCenter);
-	const bounds = geoBounds(currentCenter);
-	const distance = geoDistance(bounds[1], bounds[0]);
-	const scale = height + width / distance / Math.sqrt(2);
-
-	const projection = geoMercator()
-		.scale(scale)
-		.center(center)
-		.translate([width / 2, height / 2]);
-
-	const path = geoPath().projection(projection);
-
-	useEffect(() => {
-		pathRef.current = path;
-	}, []);
-
-	const renderNL = () => {
-		return (
-			<>
-				<g className='gemeentes'>
-					<path
-						className='gemeente-borders'
-						d={path(gemeenteBorder)}
-					/>
-				</g>
-
-				<g className='provinces'>
-					{province.features.map((d) => (
-						<path
-							key={d.id}
-							className={
-								activeProvinceFeature === d
-									? 'province active'
-									: 'province'
-							}
-							d={path(d)}
-							onClick={() => activateProvince(d)}
-							title={d.properties.statnaam}
-						/>
-					))}
-					<path
-						className='province-borders'
-						d={path(provinceBorder)}
-					/>
-				</g>
-			</>
-		);
-	};
-
-	return (
-		<>
-			<ZoomContainer
-				{...nld}
-				setActiveProvinceFeature={setActiveProvinceFeature}
-				activeProvinceFeature={activeProvinceFeature}
-				path={path}
-				size={dimensions}
-				width={width}
-				height={height}
-			>
-				{props.nld && renderNL()}
-				<Marks {...props} projection={projection} />
-			</ZoomContainer>
-		</>
-	);
-};
-
-const StyledProvincePath = styled.path`
-	transition-duration: 700ms;
-
-	:hover {
-		opacity: 0.7;
-	}
-`;
 
 const Marks = (props) => {
 	const {
@@ -152,7 +63,9 @@ const Marks = (props) => {
 							// 		: false
 							// }
 							// opacity={
-							// 	hoveredUsage && d.usage !== hoveredUsage ? 0.1 : 0.8
+							// 	hoveredUsage && d.usage !== hoveredUsage
+							// 		? 0.1
+							// 		: 0.8
 							// }
 						>
 							<title> {d.name}</title>
@@ -181,13 +94,13 @@ const Circle = (props) => {
 
 	// const setState = useSpring({ opacity: 1, from: { opacity: 0 } });
 
-	const style = useSpring({
-		config: {
-			duration: 100,
-		},
-		opacity: active ? 1 : 0.1,
-		r: active ? r : r / 2,
-	});
+	// const style = useSpring({
+	// 	config: {
+	// 		duration: 100,
+	// 	},
+	// 	opacity: active ? 0.8 : 0.1,
+	// 	r: active ? r : r / 2,
+	// });
 
 	// const newStyle = useSpring({
 	// 	opacity: active ? 1 : 0.1,
@@ -200,20 +113,18 @@ const Circle = (props) => {
 
 	return (
 		<StyledCircle
-			{...style}
 			fill={fill}
-			// cx={cx}
-			// cy={cy}
-			r={r}
-			// r={props.active && props.active ? r : r / 2}
-			opacity={props.active && props.active ? 0.7 : 0.3}
-			transform={`translate(${proj})`}
+			cx={cx}
+			cy={cy}
+			r={props.active && props.active ? r : r / 2}
+			opacity={props.active && props.active ? 0.8 : 0.1}
+			// transform={`translate(${proj})`}
 		/>
 	);
 };
 
 const StyledCircle = styled(animated.circle)`
-	transition-duration: 600ms;
+	transition-duration: 500ms;
 	/* fill: ${(props) => (props.active ? colors.blue : colors.blue)}; */
 	/* fill-opacity: 1; */
 	/* stroke: ${(props) => (props.active ? colors.red : colors.blue)}; */
@@ -223,3 +134,5 @@ const StyledCircle = styled(animated.circle)`
 		stroke: ${colors.white};
 	}
 `;
+
+export default Marks;

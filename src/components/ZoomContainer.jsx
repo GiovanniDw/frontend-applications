@@ -1,5 +1,5 @@
 import { select, zoom, zoomIdentity, zoomTransform } from 'd3';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useSvg } from './SVGContainer';
 
 export const ZoomContainer = (props) => {
@@ -25,7 +25,7 @@ export const ZoomContainer = (props) => {
 			const { transform } = event;
 			setTransform(transform);
 		};
-		const zoomMap = zoom().scaleExtent([1, 10]).on('zoom', zoomed);
+		const zoomMap = zoom().scaleExtent([1, 7]).on('zoom', zoomed);
 		const reset = () => {
 			// setActiveProvinceFeature(null);
 			svg.transition()
@@ -59,17 +59,16 @@ export const ZoomContainer = (props) => {
 						)
 						.translate(-(x0 + x1) / 2, -(y0 + y1) / 2)
 				);
-		} else {
+		}
+		if (!activeProvinceFeature) {
 			reset();
 		}
 		svg.call(zoomMap);
-		return () => {
-			svg.call(zoomMap);
-		};
+		return;
 	}, [svgElement, activeProvinceFeature]);
 
 	return (
-		<g transform={`translate(${x}, ${y}) scale(${k})`} strokeWidth={1 / k}>
+		<g transform={`translate(${x}, ${y}) scale(${k})`} strokeWidth={2 / k}>
 			{children}
 		</g>
 	);

@@ -22,6 +22,7 @@ export const Chart = (props) => {
 		colorScale,
 		onHover,
 		nestedActiveLocations,
+		activeProvince,
 	} = props;
 	const { width, height } = dimensions;
 
@@ -94,7 +95,6 @@ export const Chart = (props) => {
 					height - 10 - pieSize.width / 2
 				})`}
 			>
-				<text>Hi</text>
 				<g ref={pieChartRef} className='arc'></g>
 			</g>
 		</>

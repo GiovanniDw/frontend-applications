@@ -5,7 +5,7 @@ import { SVGContainer } from '../SVGContainer';
 import { useDimensions, useBbox } from '../../helpers/useResizeObservers';
 import useMeasure from '../../hooks/useMeasure';
 import Legend from '../Legend';
-import { Map } from './Map';
+import { Map } from '../Map';
 import { max, scaleSqrt, scaleOrdinal, scaleLinear } from 'd3';
 
 import Chart from '../Chart';

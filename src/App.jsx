@@ -69,19 +69,19 @@ export const App = () => {
 		}
 	}, [data]);
 
-	if (!nld || !parkingData) {
-		return (
-			<div className='App'>
-				<Loading />
-			</div>
-		);
-	}
+	// if (!nld || !parkingData) {
+	// 	return (
+	// 		<div className='App'>
+	// 			<Loading />
+	// 		</div>
+	// 	);
+	// }
 
 	return (
 		<>
 			<div className='App'>
 				<Container ref={vizWrapperRef}>
-					{isLoading ? (
+					{isLoading || !nld ? (
 						<Loading />
 					) : (
 						<DrawViz nld={nld} {...parkingData} dispatch={dispatch}>

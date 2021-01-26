@@ -109,7 +109,7 @@ export const GlobalStyle = createGlobalStyle`
 	height:100%;
 	display:flex;
 	position:relative;
-	padding-bottom:50px;
+	margin-bottom:150px;
 	padding-bottom:calc(50px + env(safe-area-inset-bottom));
 	.title {
 		position: absolute;
@@ -153,7 +153,7 @@ export const GlobalStyle = createGlobalStyle`
 
 .province-borders {
 	fill: none;
-	stroke: var(--white);
+	stroke: ${colors.white};
 	stroke-width: 1;
 	stroke-linejoin: round;
 	stroke-linecap: round;

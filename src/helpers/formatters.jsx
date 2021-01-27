@@ -10,7 +10,7 @@ import {
 	max,
 } from 'd3';
 
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import { GlobalStyle, colors, px2vw } from '../GlobalStyles';
 
@@ -71,7 +71,6 @@ export const nestedData = (data) => {
 		(v) => v.length,
 		(d) => d.usage
 	);
-
 	return nested;
 };
 

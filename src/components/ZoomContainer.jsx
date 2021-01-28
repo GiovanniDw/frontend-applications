@@ -65,7 +65,11 @@ export const ZoomContainer = (props) => {
 	}, [svgElement, activeProvinceFeature]);
 
 	return (
-		<g transform={`translate(${x}, ${y}) scale(${k})`} strokeWidth={2 / k}>
+		<g
+			className='zoom-container'
+			transform={`translate(${x}, ${y}) scale(${k})`}
+			strokeWidth={2 / k}
+		>
 			{children}
 		</g>
 	);

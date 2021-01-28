@@ -24,6 +24,7 @@ export const Legend = ({
 	sizeScale,
 	dispatch,
 	activeUsage,
+	allLocations,
 }) => {
 	const { width, height } = dimensions;
 	const svgElement = useSvg();
@@ -99,7 +100,7 @@ export const Legend = ({
 							}}
 							onMouseOut={() => {
 								setHoveredUsage(null);
-								dispatch({ type: 'RESET' });
+								dispatch({ type: 'RESET_PARKING_USAGE' });
 							}}
 						>
 							<text x={tickTextOffset} dy='.32em'>
@@ -119,7 +120,7 @@ export const Legend = ({
 						</g>
 					))}
 				</g>
-				{sizeScale && (
+				{allLocations.length && (
 					<g ref={sizeLegendRef} className='size-legend'>
 						<text
 							className='legend-label'

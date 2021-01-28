@@ -16,10 +16,10 @@ import { GlobalStyle, colors, px2vw } from '../GlobalStyles';
 
 // const [maxRadius, setMaxradius] = useState(10);
 
-const colorRange = [colors.darkBlue, colors.darkGray, colors.yellow];
+export const colorRange = [colors.darkBlue, colors.darkGray, colors.yellow];
 const colorValue = (d) => d.usage;
 const sizeValue = (d) => d.capacity;
-const provinceValue = (d) => d.province;
+export const provinceValue = (d) => d.province;
 const maxRadius = 10;
 
 // export const colorScale = () =>

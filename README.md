@@ -19,7 +19,9 @@ Learn more about the [`tech-trach().and().this(course)`](https://github.com/cmda
 - [Assignment](#assignment)
   - [Concept](#concept)
     - [Research Questions](#research-questions)
-- [API's](#apis)
+- [Data Used](#data-used)
+  - [Parking Data](#parking-data)
+  - [GeoJson](#geojson)
 - [Resources](#resources)
 - [Credits](#credits)
 
@@ -42,6 +44,7 @@ Create a client-side application in JavaScript which dynamically renders data to
 -   [x] Use D3 & React to Create Visualisation.
 -   [x] Zoom to clicked Province
 -   [x] Transform data based on active province
+-   [x] Show points on map based on hover
 
 ## Installation
 
@@ -73,22 +76,65 @@ Detailed information about te assignments [the Wiki⤴︎](https://github.com/Gi
 
 #### Research Questions
 
--   Wat zijn de mogelijkheden voor P&R parkeren in Nederland?
-    -   P&R mogelijkheden
-        -   per provincie?
-        -   per stad?
-        -   per garage?
-    -   P&R Vergelijken
-        -   Per stad.
+-   Wat voor parkeermogelijkheden zijn er in Nederland?
+    -   Welke parkeermogelijkheid zorgt voor de meeste parkeerplaatsen?
+        Wat is het verschil per provincie?
+    -   Is er een verband tussen de verschillende soorten parkeermogelijkheden en het gebied?
+        -   Is er een verschil te zien binnen en buiten de randstad?
 
-## API's
+## Data Used
 
-Most of the data that will be used, comes from the [opendata.rdw.nl⤴︎](https://opendata.rdw.nl) API.
+### Parking Data
 
-**API-endpoint:**
+The parking data that's used in this project - [api.openparking.nl⤴︎](https://www.parkeerdatacatalogus.nl/#parkeerdata)
 
-```html
-https://opendata.rdw.nl/resource/ixf8-gtwq.json
+```js
+{
+	"id": 1,
+	"name": "P+R Station Appingedam (Appingedam)",
+	"staticDataUrl": "https://npropendata.rdw.nl//parkingdata/v2/static/fc749565-1fe9-42f0-920a-3b4e718d62f9",
+	"dynamicDataUrl": "",
+	"limitedAccess": "0",
+	"uuid": "fc749565-1fe9-42f0-920a-3b4e718d62f9",
+	"latitude": 53.325488634795,
+	"longitude": 6.8620881539554,
+	"city": "Appingedam",
+	"country_code": "nl",
+	"province": "Groningen",
+	"region": "Noord-Nederland",
+	"mark": "good",
+	"usage": "P+R Parkeerplaats",
+	"accessPoints": "1",
+	"capacity": 22,
+	"contactPersons": "1",
+	"minimumHeightInMeters": 0,
+	"openingTimes": "1",
+	"tariffs": "1",
+	"Operator": "Appingedam"
+},
+{
+	...
+}
+
+```
+
+### GeoJson
+
+The geojson used in this project - [Cartomap / nl](https://github.com/cartomap/nl)
+
+```json
+{"type":"FeatureCollection", "features": [
+    {"type":"Feature",
+    "geometry":
+        {"type":"MultiPolygon","coordinates":[[[[269919,540356],[268516,541104],[...]]]]]},
+    "properties":{
+        "statcode":"PV20",
+        "statnaam":"Groningen",
+        "jrstatcode":"2021PV20",
+        "rubriek":"provincie",
+        "FID":"cbs_provincie_2021_gegeneraliseerd.1"},
+        "id":"PV20"},{...},
+
 ```
 
 ## Resources

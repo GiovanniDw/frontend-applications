@@ -144,14 +144,24 @@ export const GlobalStyle = createGlobalStyle`
 	fill: ${colors.lightGreen};
 	stroke: ${colors.white};
 	${'' /* transition: 0.3s; */}
+	transition-duration:600ms;
 }
 
 .provinces .active {
+
+	
 	opacity: .8;
 	transition: visibility 0s, opacity 0.3s linear;
+	transition-duration:600ms;
+	z-index:999;
+	stroke-width:2;
+	
+	stroke-opacity:1;
+	
 }
 
 .province-borders {
+	transition-duration:600ms;
 	fill: none;
 	stroke: ${colors.white};
 	stroke-width: 1;
@@ -174,7 +184,9 @@ export const GlobalStyle = createGlobalStyle`
 	font-weight:bold;
 }
 
-
+.zoom-container {
+	
+}
 
     `;
 

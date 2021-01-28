@@ -125,3 +125,9 @@ export const useParkingData = () => {
 
 	return data;
 };
+
+{"type":"FeatureCollection", "features": [
+	{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[269919,540356],[268516,541104],[...]]]]]},"properties":{"statcode":"PV20","statnaam":"Groningen","jrstatcode":"2021PV20","rubriek":"provincie","FID":"cbs_provincie_2021_gegeneraliseerd.1"},"id":"PV20"},
+	{"type":"Feature","geometry":{"type":"MultiPolygon","coordinates":[[[[135879,590524],[133379,589771],[...]]]]},"properties":{"statcode":"PV21","statnaam":"Fryslân","jrstatcode":"2021PV21","rubriek":"provincie","FID":"cbs_provincie_2021_gegeneraliseerd.2"},"id":"PV21"},
+
+	

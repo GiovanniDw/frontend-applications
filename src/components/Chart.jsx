@@ -36,7 +36,6 @@ export const Chart = (props) => {
 	const cache = useRef(nestedActiveLocations);
 
 	const onMouseEnter = (d) => {
-		console.log(this);
 		const usage = d.target.__data__.data[0];
 		// select().attr('opacity', 0.5);
 		dispatch({ type: 'FILTER_PARKING_USAGE', payload: { usage } });
@@ -44,7 +43,7 @@ export const Chart = (props) => {
 		setHoveredUsage(d);
 	};
 	const onMouseLeave = () => {
-		dispatch({ type: 'FILTER_PARKING_USAGE', payload: {} });
+		dispatch({ type: 'RESET_PARKING_USAGE' });
 	};
 
 	useEffect(() => {

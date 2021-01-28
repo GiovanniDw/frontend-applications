@@ -47,6 +47,20 @@ const parkingReducer = (state, action) => {
 				activeLocations,
 				activeUsage: usage,
 			};
+		case 'RESET_PARKING_USAGE':
+			if (state.activeProvince !== null) {
+				activeLocations = state.allLocations.filter((d) =>
+					filterParkingByProvince(d, state.activeProvince)
+				);
+			} else {
+				activeLocations = state.allLocations;
+			}
+			return {
+				...state,
+				activeLocations,
+				activeUsage: null,
+			};
+
 		case 'FILTER_ACTIVE_PROVINCE':
 			province = action.payload.province;
 			if (province !== null) {
@@ -56,16 +70,17 @@ const parkingReducer = (state, action) => {
 				// .filter((d) => filterParkingByUsage(d, state.activeUsage));
 				// } else if (province === state.activeProvince) {
 				// 	province = null;
+				nestedActiveLocations = nestedData(state.activeLocations);
 			} else {
 				activeLocations = state.allLocations.filter((d) =>
 					filterParkingByProvince(d, province)
 				);
+				nestedActiveLocations = nestedData(state.allLocations);
 			}
 			sortedLocations = activeLocations.sort((a, b) =>
 				ascending(a.usage, b.usage)
 			);
-
-			nestedActiveLocations = nestedData(activeLocations);
+			nestedActiveLocations = nestedData(sortedLocations);
 			return {
 				...state,
 				activeLocations,

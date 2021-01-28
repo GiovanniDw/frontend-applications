@@ -64,16 +64,16 @@ export const useDataApiD3 = (initialUrl, initialData) => {
 			return d;
 		};
 		const makeAPICall = () => {
-			const ls = localStorage.getItem(initialUrl);
+			const ls = localStorage.getItem('data', url);
 			if (ls) {
 				dsv(';', ls, autoType, cleanParkingData).then(setData);
-				console.log(data);
+				console.log(true);
 			} else {
 				setIsLoading(true);
 				try {
 					dsv(';', url, autoType, cleanParkingData).then(setData);
-					console.log(data);
-					localStorage.setItem(initialUrl, url);
+					console.log(false);
+					localStorage.setItem('data', url);
 				} catch (err) {
 					console.log('err', err);
 				}

@@ -129,6 +129,25 @@ The `dsv()` fetching function from `d3` returns this Object.
 
 ```
 
+After removing values I dont need, this object is returned:
+
+```js
+{
+	"id": 1,
+	"name": "P+R Station Appingedam (Appingedam)",
+	"province": "Groningen",
+	"usage": "P+R Parkeerplaats",
+	"city": "Appingedam",
+	"latitude": 53.325488634795,
+	"longitude": 6.8620881539554,
+	"capacity": 22,
+	"minHeign": 0
+},{
+	...
+}
+
+```
+
 ### GeoJson
 
 The geojson used in this project - [Cartomap / nl](https://github.com/cartomap/nl)

@@ -97,6 +97,8 @@ id,name,staticDataUrl,dynamicDataUrl,limitedAccess,uuid,latitude,longitude,city,
 1,P+R Station Appingedam (Appingedam),https://npropendata.rdw.nl//parkingdata/v2/static/fc749565-1fe9-42f0-920a-3b4e718d62f9,,0,fc749565-1fe9-42f0-920a-3b4e718d62f9,53.325488634795,6.8620881539554,Appingedam,nl,Groningen,Noord-Nederland,good,park and ride,1,22,1,0,1,1,Appingedam
 ```
 
+The `dsv()` fetching function from `d3` returns this Object.
+
 ```js
 {
 	"id": 1,

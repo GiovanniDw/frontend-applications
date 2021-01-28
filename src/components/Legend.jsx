@@ -31,9 +31,8 @@ export const Legend = ({
 	const [hoveredUsage, setHoveredUsage] = useState(null);
 	const sizeValues = [100, 1000, 2500];
 	useEffect(() => {
-		if ((!sizeLegendRef && !sizeScale) || !dimensions) return;
+		if (!sizeLegendRef || !sizeScale || !dimensions || !svgElement) return;
 
-		const svg = select(svgElement);
 		let circleX = 0;
 		const selection = select(sizeLegendRef.current);
 		const drawSizeLegend = () => {

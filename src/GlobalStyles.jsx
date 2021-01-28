@@ -174,6 +174,8 @@ export const GlobalStyle = createGlobalStyle`
 	font-weight:bold;
 }
 
+
+
     `;
 
 export default GlobalStyle;

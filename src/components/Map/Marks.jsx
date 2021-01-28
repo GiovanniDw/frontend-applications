@@ -39,7 +39,7 @@ const Marks = (props) => {
 
 	return (
 		<g className='parking-locations'>
-			{sizeScale &&
+			{allLocations &&
 				allLocations.map((d) => {
 					const proj = projection([d.longitude, d.latitude]);
 					const [x, y] = projection([d.longitude, d.latitude]);
@@ -116,14 +116,14 @@ const Circle = (props) => {
 			fill={fill}
 			cx={cx}
 			cy={cy}
-			r={props.active && props.active ? r : r / 2}
+			r={props.active && props.active ? r : 1}
 			opacity={props.active && props.active ? 0.8 : 0.1}
 			// transform={`translate(${proj})`}
 		/>
 	);
 };
 
-const StyledCircle = styled(animated.circle)`
+const StyledCircle = styled.circle`
 	transition-duration: 500ms;
 	/* fill: ${(props) => (props.active ? colors.blue : colors.blue)}; */
 	/* fill-opacity: 1; */

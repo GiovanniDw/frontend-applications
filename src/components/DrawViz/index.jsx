@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react';
-import useResizeAware from 'react-resize-aware';
+
 import { SVGContainer } from '../SVGContainer';
 
 import { useDimensions, useBbox } from '../../helpers/useResizeObservers';

@@ -44,7 +44,7 @@ Create a client-side application in JavaScript which dynamically renders data to
 -   [x] Use D3 & React to Create Visualisation.
 -   [x] Zoom to clicked Province
 -   [x] Transform data based on active province
--   [x] Show points on map based on hover
+-   [x] Display filtered points on a map, based on hovering over another component with the same value.
 
 ## Installation
 
@@ -76,17 +76,26 @@ Detailed information about te assignments [the Wiki⤴︎](https://github.com/Gi
 
 #### Research Questions
 
--   Wat voor parkeermogelijkheden zijn er in Nederland?
+-   **Wat voor parkeermogelijkheden zijn er in Nederland?**
+
     -   Welke parkeermogelijkheid zorgt voor de meeste parkeerplaatsen?
+
         Wat is het verschil per provincie?
+
     -   Is er een verband tussen de verschillende soorten parkeermogelijkheden en het gebied?
-        -   Is er een verschil te zien binnen en buiten de randstad?
+
+        Is er een verschil te zien binnen en buiten de randstad?
 
 ## Data Used
 
 ### Parking Data
 
 The parking data that's used in this project - [api.openparking.nl⤴︎](https://www.parkeerdatacatalogus.nl/#parkeerdata)
+
+```csv
+id,name,staticDataUrl,dynamicDataUrl,limitedAccess,uuid,latitude,longitude,city,country_code,province,region,mark,usage,accessPoints,capacity,contactPersons,minimumHeightInMeters,openingTimes,tariffs,Operator
+1,P+R Station Appingedam (Appingedam),https://npropendata.rdw.nl//parkingdata/v2/static/fc749565-1fe9-42f0-920a-3b4e718d62f9,,0,fc749565-1fe9-42f0-920a-3b4e718d62f9,53.325488634795,6.8620881539554,Appingedam,nl,Groningen,Noord-Nederland,good,park and ride,1,22,1,0,1,1,Appingedam
+```
 
 ```js
 {
@@ -122,7 +131,7 @@ The parking data that's used in this project - [api.openparking.nl⤴︎](https:
 
 The geojson used in this project - [Cartomap / nl](https://github.com/cartomap/nl)
 
-```json
+```js
 {"type":"FeatureCollection", "features": [
     {"type":"Feature",
     "geometry":
@@ -133,7 +142,10 @@ The geojson used in this project - [Cartomap / nl](https://github.com/cartomap/n
         "jrstatcode":"2021PV20",
         "rubriek":"provincie",
         "FID":"cbs_provincie_2021_gegeneraliseerd.1"},
-        "id":"PV20"},{...},
+        "id":"PV20"},
+        {
+            ...
+        },...
 
 ```
 

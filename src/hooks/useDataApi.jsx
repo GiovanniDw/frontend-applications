@@ -63,15 +63,17 @@ export const useDataApiD3 = (initialUrl, initialData) => {
 
 			return d;
 		};
-		const makeAPICall = () => {
+		const makeAPICall = async () => {
 			const ls = localStorage.getItem('data', url);
 			if (ls) {
-				dsv(';', ls, autoType, cleanParkingData).then(setData);
+				await dsv(';', ls, autoType, cleanParkingData).then(setData);
 				console.log(true);
 			} else {
 				setIsLoading(true);
 				try {
-					dsv(';', url, autoType, cleanParkingData).then(setData);
+					await dsv(';', url, autoType, cleanParkingData).then(
+						setData
+					);
 					console.log(false);
 					localStorage.setItem('data', url);
 				} catch (err) {
